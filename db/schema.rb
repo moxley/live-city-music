@@ -11,16 +11,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131021055426) do
+ActiveRecord::Schema.define(version: 20131022033017) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "artists", force: true do |t|
+    t.string   "name"
+    t.integer  "zip_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "events", force: true do |t|
+    t.string   "title"
+    t.integer  "venue_id"
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "events", ["venue_id"], name: "index_events_on_venue_id", using: :btree
 
   create_table "venues", force: true do |t|
     t.integer  "zip_id"
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "address_1"
+    t.string   "address_2"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zip"
+    t.string   "phone"
   end
 
 end
