@@ -1,10 +1,10 @@
 class MercuryImporter
   def import(file)
     MercuryParser.new.raw_events_from_file(file).each do |raw_event|
-      artists = find_or_create_artists(raw_event)
       event = Event.create title: raw_event.title,
                            venue: find_or_create_venue(raw_event),
-                           description: raw_event.description
+                           description: raw_event.description,
+                           artists: find_or_create_artists(raw_event)
     end
   end
 
@@ -18,6 +18,10 @@ class MercuryImporter
 
   def find_or_create_artists(raw_event)
     names = raw_event.title[/^([^:]*:\s*)?(.*)$/, 2] # Remove special event name
+    if names.include?(',')
+      # Replace last 'and' with comma
+      names.gsub!(/ and /, ',')
+    end
     names = names.split(',').map(&:strip)
     names.map do |name|
       Artist.find_or_create_by(name: name)

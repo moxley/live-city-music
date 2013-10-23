@@ -57,7 +57,9 @@ describe MercuryImporter do
       </body></html>)
     file = StringIO.new(html)
     Event.should receive(:create)
-    Artist.should receive(:create)
+    names = []
+    Artist.stub(:find_or_create_by) { |h| names << h[:name] }
     importer.import(file)
+    names.should eq ['Wilkinson Blades', 'Race of Strangers', 'Garden Goat', 'Beaver Boogie Band']
   end
 end
