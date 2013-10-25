@@ -6,7 +6,7 @@ class MercuryParser
   end
 
   remove_const(:RawEvent) if defined?(RawEvent)
-  class RawEvent < Struct.new(:title, :date_info, :location, :description)
+  class RawEvent < Struct.new(:title, :time_info, :location, :description, :price_info)
   end
 
   def raw_events
@@ -46,10 +46,10 @@ class MercuryParser
   # private
 
   def parse_event(listing_el)
-    event_title, date_info = parse_header(listing_el)
+    event_title, time_info, price_info = parse_header(listing_el)
     location = parse_location(listing_el)
     description = listing_el.css('.descripTxt').text.to_s.strip
-    RawEvent.new event_title, date_info, location, description
+    RawEvent.new event_title, time_info, location, description, price_info
   end
 
   def parse_header(listing_el)
@@ -58,16 +58,53 @@ class MercuryParser
     header_el.css('h3 > a').each do |a|
       event_title = a.text.strip.gsub(/\s+/, ' ')
     end
-    date_info = nil
+    time_info = nil
     h3 = nil
-    header_el.children.each_with_index do |el, i|
-      if el.element? && el.name == 'h3'
-        h3 = el
-      elsif h3 && el.text? && date_info.nil?
-        date_info = el.text.strip
+    price_info = nil
+    # h3, time_info, br, price_info
+    pattern = [{tag: 'h3'}, {text: true}, {tag: 'br'}, {text: true}]
+    match = []
+    iter = PutbackIterator.new(header_el.children)
+    while el = iter.next
+      p = pattern[match.length] or break
+      if p[:tag] && el.element? && el.name == p[:tag]
+        match << el.text
+        matched_text = false
+      elsif p[:text] && el.text?
+        tmp_text = [el.text]
+        while el = iter.next
+          if el.text?
+            tmp_text << el.text
+          elsif el
+            iter.put_back
+            break
+          end
+        end
+        match << tmp_text.join.strip
       end
     end
-    [event_title, date_info]
+    time_info = match[1]
+    price_info = match[3]
+    [event_title, time_info, price_info]
+  end
+
+  class PutbackIterator
+    attr_accessor :index
+
+    def initialize(items)
+      @items = items
+      @index = 0
+    end
+
+    def next
+      item = @items[@index]
+      @index += 1
+      item
+    end
+
+    def put_back
+      @index -= 1
+    end
   end
 
   def parse_location(listing_el)

@@ -1,3 +1,0 @@
-== README
-
-Band information repository.

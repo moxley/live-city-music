@@ -1,4 +1,4 @@
-class EventParser
+module EventParser
   PLACEHOLDER_ARTIST_NAMES = %(guests friends)
 
   def self.artist_names(event_title)
@@ -13,6 +13,14 @@ class EventParser
 
     names = names.reject do |n|
       PLACEHOLDER_ARTIST_NAMES.include?(n.pluralize.downcase)
+    end
+  end
+
+  def self.times(time_string)
+    if time_string =~ /^[^\d]*$/
+      [nil, nil]
+    else
+      [Time.parse(time_string), nil]
     end
   end
 end

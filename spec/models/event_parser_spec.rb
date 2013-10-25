@@ -34,4 +34,17 @@ describe EventParser do
       artist_names('The 32nd Street Singers, Guest').should eq ['The 32nd Street Singers']
     end
   end
+
+  describe '#times' do
+    def times(str)
+      EventParser.times(str)
+    end
+
+    it 'parses the starting time' do
+      time, _ = times('Sat., Oct. 5, 3 p.m.')
+      time.month.should eq 10
+      time.day.should eq 5
+      time.year.should eq 2013
+    end
+  end
 end

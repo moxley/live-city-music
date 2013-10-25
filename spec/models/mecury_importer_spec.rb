@@ -12,6 +12,11 @@ describe MercuryImporter do
     event = Event.where(title: 'Lents 1st Annual Oktoberfest: Wilkinson Blades, Race of Strangers, Garden Goat and Beaver Boogie Band').first
     event.should be_present
     event.description.should include 'A lot of Germany in a little bit of Lents'
+    event.time_info.should eq 'Sun., Sept. 29, 12 p.m.'
+    event.starts_at.month.should eq 9
+    event.starts_at.day.should eq 29
+    event.starts_at.year.should eq 2013
+    event.price_info.should eq '$5'
 
     venue = event.venue
     venue.should be_present
@@ -22,39 +27,7 @@ describe MercuryImporter do
   end
 
   it 'calls Artist.create' do
-    html = %(<html><body>
-      <div class="EventListing">
-        <div class="listing">
-          <h3>
-            <span class="longOnly">
-              <div class="FeaturesIcons">
-                <a href="/portland/EventSearch?feature=Readers%20Pick" class="FeaturesIcons_readers_pick" title="Readers Pick">
-                <span>Readers Pick</span>
-              </a>
-              </div>
-            </span>
-            <a href="http://www.portlandmercury.com/portland/lents-1st-annual-oktoberfest/Event?oid=10556451">
-              Lents 1st Annual Oktoberfest:
-              Wilkinson Blades, Race of Strangers, Garden Goat and Beaver Boogie Band
-            </a>
-          </h3>
-        </div>
-
-        <div class="listingLocation">
-          <a href="http://www.portlandmercury.com/portland/eagle_eye_tavern/Location?oid=7139747">
-            Eagle Eye Tavern
-          </a> 
-          <img src="/images/icons/phone.gif" alt="phone" />
-          503-774-2141<br />
-          5836 SE 92nd<br />
-          <span class="locationRegion"><a href="http://www.portlandmercury.com/portland/EventSearch?neighborhood=38241">Southeast</a></span>
-        </div>
-
-        <div class="descripTxt">
-          A lot of Germany in a little bit of Lents
-        </div>
-      </div>
-      </body></html>)
+    html = "<html><body>" + File.read('spec/fixtures/html/single_event.html') + "</body></html>"
     file = StringIO.new(html)
     Event.should receive(:create)
     names = []

@@ -15,10 +15,15 @@ class MercuryImporter
 
   def import(file)
     MercuryParser.new.raw_events_from_file(file).each do |raw_event|
+      starts_at, ends_at = EventParser.times(raw_event.time_info)
       event = Event.create title: raw_event.title,
                            venue: find_or_create_venue(raw_event),
                            description: raw_event.description,
-                           artists: find_or_create_artists(raw_event)
+                           artists: find_or_create_artists(raw_event),
+                           time_info: raw_event.time_info,
+                           starts_at: starts_at,
+                           ends_at: ends_at,
+                           price_info: raw_event.price_info
     end
   end
 
