@@ -14,13 +14,23 @@ class MercuryImporter
   end
 
   def import(file)
+    date = nil
+    if file.try(:path) && (m = file.path.match(/((\d+)-)?(\d+)-(\d+)/))
+      year = (m[2] || Time.now.year).to_i
+      month = m[3].to_i
+      day = m[4].to_i
+      date = Date.new(year, month, day)
+    end
+
     MercuryParser.new.raw_events_from_file(file).each do |raw_event|
-      starts_at, ends_at = EventParser.times(raw_event.time_info)
+      starts_at, ends_at = EventParser.times(raw_event.time_info, date: date)
+      time_info = raw_event.time_info
+      time_info = "#{date.strftime('%Y-%m-%d')} #{time_info}" if date
       event = Event.create title: raw_event.title,
                            venue: find_or_create_venue(raw_event),
                            description: raw_event.description,
                            artists: find_or_create_artists(raw_event),
-                           time_info: raw_event.time_info,
+                           time_info: time_info,
                            starts_at: starts_at,
                            ends_at: ends_at,
                            price_info: raw_event.price_info

@@ -29,6 +29,9 @@ describe MercuryImporter do
   it 'calls Artist.create' do
     html = "<html><body>" + File.read('spec/fixtures/html/single_event.html') + "</body></html>"
     file = StringIO.new(html)
+    def file.path
+      "mercury 10-20.html"
+    end
     Event.should receive(:create)
     names = []
     Artist.stub(:find_or_create_by) { |h| names << h[:name] }
