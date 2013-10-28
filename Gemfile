@@ -50,3 +50,4 @@ end
 
 gem 'nokogiri'
 gem 'anemone'
+gem 'acts-as-taggable-on'
