@@ -53,7 +53,7 @@ class PageCollector
   def downloads
     urls.map do |u|
       response = http_fetch(u[:url])
-      date = Time.now.strftime('%Y%m%d')
+      date = Time.now.strftime('%Y-%m-%d')
       { filename: "#{u[:name]}-#{date}.html", content: response.body }
     end
   end
