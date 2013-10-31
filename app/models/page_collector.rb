@@ -34,6 +34,7 @@ class PageCollector
     # heroku run bin/job
 
     out = StringIO.new
+    out.puts "PageCollector\n"
     out.puts "Downloads:"
     downloads.each do |df|
       out.puts "  #{df[:filename]}: #{df[:content].length}"
