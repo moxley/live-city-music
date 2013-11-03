@@ -4,6 +4,14 @@ class Artist < ActiveRecord::Base
 
   has_many :events
 
+  def venues
+    ids = Venue.joins(events: :artists_events).
+                where(artists_events: {artist_id: id}).
+                group('venues.id').
+                pluck(:id)
+    Venue.where(id: ids)
+  end
+
   class GenrePoint < Struct.new(:genre, :value)
   end
 
@@ -22,6 +30,21 @@ class Artist < ActiveRecord::Base
       end
     end
 
+    # Artist name
+    all_genres = %(jazz).downcase
+    name.downcase.split.each do |n|
+      if n.in?(all_genres)
+        hash[n] += 0.5
+      end
+    end
+
+    # Venues with genre tags
+    venues.each do |v|
+      v.genre_list.each do |genre_name|
+        hash[genre_name] += 0.25
+      end
+    end
+
     hash.map do |genre, value|
       GenrePoint.new(genre, value)
     end
@@ -29,6 +52,13 @@ class Artist < ActiveRecord::Base
 
   def genre_points
     @genre_points ||= calc_genre_points
+  end
+
+  def genre_points_by_name
+    genre_points.inject(Hash.new(0.0)) do |hash, gp|
+      hash[gp.genre] = gp.value
+      hash
+    end
   end
 
   def played_with
