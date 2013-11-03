@@ -4,5 +4,6 @@ Band information repository.
 
 ## TODO
 
-* Populate remaining columns: events: starts_at, ends_at, venues: state, zip
+* Tag relations
+* Populate remaining columns: events: starts_at, venues: state
 * Web-based interface
