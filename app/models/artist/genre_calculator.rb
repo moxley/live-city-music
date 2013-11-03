@@ -42,11 +42,8 @@ class Artist::GenreCalculator
   end
 
   def calc_artist_name
-    all_genres = %(jazz).downcase
-    name.downcase.split.each do |n|
-      if n.in?(all_genres)
-        points_by_genre[n] += 0.5
-      end
+    GenreUtil.genres_in_name(name).each do |genre_name|
+      points_by_genre[genre_name] += 0.5
     end
   end
 
