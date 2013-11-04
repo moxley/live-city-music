@@ -1,7 +1,8 @@
 class Genre
   attr_accessor :id, :name
   GENRES = [
-    {id: 1, name: 'jazz'}
+    {id: 1, name: 'jazz'},
+    {id: 2, name: 'country'},
   ]
 
   def self.all

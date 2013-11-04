@@ -7,7 +7,7 @@ describe GenreJob do
   before(:each) do
     tagger.tag(venue, with: 'jazz', on: :genres)
     tagger.tag(artist, with: 'jazz', on: :genres)
-    GenreJob.new.perform
+    GenreJob.perform
   end
 
   it 'creates genre_point records for user-tagged venue genres' do
