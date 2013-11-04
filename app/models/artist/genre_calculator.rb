@@ -13,8 +13,9 @@ class Artist::GenreCalculator
   end
 
   def genre_points
-    hash.map do |genre, value|
-      GenrePoint.new(genre, value)
+    points_by_genre.map do |genre_name, value|
+      genre = Genre.find_by_name(genre_name)
+      GenrePoint.new(genre_id: genre.id, value: value)
     end
   end
 

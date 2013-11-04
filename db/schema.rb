@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131028053045) do
+ActiveRecord::Schema.define(version: 20131103225037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,23 @@ ActiveRecord::Schema.define(version: 20131028053045) do
   end
 
   add_index "events", ["venue_id"], name: "index_events_on_venue_id", using: :btree
+
+  create_table "fetched_pages", force: true do |t|
+    t.string   "url",        null: false
+    t.text     "content",    null: false
+    t.datetime "fetched_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "genre_points", force: true do |t|
+    t.string   "target_type", limit: 30,               null: false
+    t.integer  "target_id",                            null: false
+    t.integer  "genre_id",                             null: false
+    t.float    "value",                  default: 0.0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "taggings", force: true do |t|
     t.integer  "tag_id"

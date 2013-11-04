@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Venue do
   subject(:venue) { Venue.create! name: 'Roxy' }
+  subject(:tagger) { User.create! email: 'a@b.com' }
 
   it 'saves to database' do
     venue
@@ -12,7 +13,7 @@ describe Venue do
   describe 'genre points' do
     it 'is 1.0 for a user-tagged genre' do
       venue
-      venue.genre_list.add 'jazz'
+      tagger.tag(venue, with: 'jazz', on: :genres)
       venue.genre_points_by_name['jazz'].should eq 1.0
     end
   end

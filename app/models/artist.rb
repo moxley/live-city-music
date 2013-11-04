@@ -6,6 +6,7 @@ class Artist < ActiveRecord::Base
   delegate :genre_points, to: :genre_calculator
 
   has_many :events
+  has_many :genre_points, as: :target
 
   def venues
     ids = Venue.joins(events: :artists_events).
