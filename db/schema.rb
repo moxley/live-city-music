@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131104030435) do
+ActiveRecord::Schema.define(version: 20131108201323) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 20131104030435) do
     t.float    "value",                  default: 0.0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "type",        limit: 20,               null: false
+    t.string   "point_type",  limit: 20,               null: false
     t.string   "source_type", limit: 20,               null: false
     t.integer  "source_id",                            null: false
   end
