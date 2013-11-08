@@ -15,35 +15,35 @@ describe 'tagging' do
     end
 
     it 'is 0.0 point by default' do
-      artist.genre_points_by_name['funk'].should eq 0.0
+      artist.genre_points_by_genre_name('funk').should eq 0.0
     end
 
     it 'is 1.0 point for a genre tag' do
       tagger.tag artist, with: 'funk', on: :user_genres
-      artist.genre_points_by_name['funk'].should eq 1.0
+      artist.genre_points_by_genre_name('funk').should eq 1.0
     end
 
     it "is 0.5 point for a peer's genre tag" do
       artist.save!
       tagger.tag peer_artist, with: 'funk', on: :user_genres
-      artist.genre_points_by_name['funk'].should eq 0.5
+      artist.genre_points_by_genre_name('funk').should eq 0.5
     end
 
     it "is 1.5 points for the artist's genre tag and a peer's genre tag" do
       tagger.tag artist, with: 'funk', on: :user_genres
       tagger.tag peer_artist, with: 'funk', on: :user_genres
-      artist.genre_points_by_name['funk'].should eq 1.5
+      artist.genre_points_by_genre_name('funk').should eq 1.5
     end
 
     it 'is 0.5 points for having a genre name within the artist name' do
       artist = create_artist('Ron Steen Jazz Jam')
-      artist.genre_points_by_name['jazz'].should eq 0.5
+      artist.genre_points_by_genre_name('jazz').should eq 0.5
     end
 
     it 'is 0.25 points for playing at a venue tagged with a genre' do
       venue.genre_list << 'jazz'
       event.artists << artist
-      artist.genre_points_by_name['jazz'].should eq 0.25
+      artist.genre_points_by_genre_name('jazz').should eq 0.25
     end
   end
 end
