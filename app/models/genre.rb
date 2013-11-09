@@ -3,6 +3,7 @@ class Genre
   GENRES = [
     {id: 1, name: 'jazz'},
     {id: 2, name: 'country'},
+    {id: 3, name: 'funk'},
   ]
 
   def self.all

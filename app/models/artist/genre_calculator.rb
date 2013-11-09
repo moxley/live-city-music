@@ -1,6 +1,8 @@
 class Artist::GenreCalculator
   attr_accessor :artist, :points_by_genre, :points_by_genre_name_and_point_type
 
+  include GenreCalculatorCommon
+
   delegate :name,
            :genre_taggings,
            :played_with,
@@ -12,47 +14,33 @@ class Artist::GenreCalculator
     @genre_points = Hash.new(0.0)
   end
 
-  def genre_points
-    points_by_genre_name_and_point_type.map do |(genre_name, type), value|
-      genre = Genre.find_by_name(genre_name)
-      GenrePoint.new(genre_id: genre.id, value: value, type: type)
-    end
+  def calculate_genre
+    points = []
+
+    points += calculate_user_tagged_points
+    points += calculate_name_embedded_points
+    points += calculate_points_from_peers
+
+    points
   end
 
-  def calculate
-    @points_by_genre_name_and_point_type = Hash.new(0.0)
-    calc_user_tags
-    calc_peers
-    calc_artist_name
-    calc_venues
-    self
+  def calculate_name_embedded_points
+    calculate_name_embedded_points_for(artist)
   end
 
-  def calc_user_tags
-    genre_taggings.each do |t|
-      points_by_genre_name_and_point_type[[t.tag.name, 'tag']] += 1.0
-    end
-  end
+  def calculate_points_from_peers
+    points = []
+    played_with.each do |peer|
+      # user-tagged genre
+      points += peer.calculate_user_tagged_points.map do |p|
+        {point_type: 'peer_user_tag', genre_name: p[:genre_name], value: 0.5, source: peer}
+      end
 
-  def calc_peers
-    played_with.each do |peer_artist|
-      peer_artist.genre_taggings.each do |t|
-        points_by_genre_name_and_point_type[[t.tag.name, 'peer']] += 0.5
+      # artist name-embedded genre
+      points += peer.calculate_name_embedded_points.map do |p|
+        {point_type: 'peer_name', genre_name: p[:genre_name], value: 0.25, source: peer}
       end
     end
-  end
-
-  def calc_artist_name
-    GenreUtil.genres_in_name(name).each do |genre_name|
-      points_by_genre_name_and_point_type[[genre_name, 'name']] += 0.5
-    end
-  end
-
-  def calc_venues
-    venues.each do |v|
-      v.genre_list.each do |genre_name|
-        points_by_genre_name_and_point_type[[genre_name, 'venue']] += 0.25
-      end
-    end
+    points
   end
 end
