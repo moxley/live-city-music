@@ -25,14 +25,39 @@ class PageCollector
     # }
   ]
 
+  # https://devcenter.heroku.com/articles/scheduler
+  # heroku run bin/job
   def self.collect
     new.collect
   end
 
   def collect
-    # https://devcenter.heroku.com/articles/scheduler
-    # heroku run bin/job
+    store_downloads
+    email_downloads
+  end
 
+  def store_downloads
+    downloads.map do |df|
+      find_or_create_page_download(df)
+    end
+  end
+
+  def find_or_create_page_download(df)
+    event_source = find_or_create_event_srouce(df[:name], df[:url])
+
+    # TODO Store to S3
+    storage_uri = nil
+    PageDownload.create! downloaded_at: Time.now, event_source: event_source, storage_uri: storage_uri
+  end
+
+  def find_or_create_event_srouce(name, url)
+    event_source = EventSource.where(name: name).first_or_initialize
+    event_source.url ||= url
+    event_source.save! if event_source.new_record? || event_source.changed?
+    event_source
+  end
+
+  def email_downloads
     out = StringIO.new
     out.puts "PageCollector\n"
     out.puts "Downloads:"
@@ -51,10 +76,10 @@ class PageCollector
   end
 
   def downloads
-    urls.map do |u|
+    @downloads ||= urls.map do |u|
       response = http_fetch(u[:url])
       date = Time.now.strftime('%Y-%m-%d')
-      { filename: "#{u[:name]}-#{date}.html", content: response.body }
+      { name: u[:name], url: u[:url], filename: "#{u[:name]}-#{date}.html", content: response.body }
     end
   end
 

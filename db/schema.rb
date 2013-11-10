@@ -80,6 +80,7 @@ ActiveRecord::Schema.define(version: 20131109230701) do
     t.string   "storage_uri"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "processed_at"
   end
 
   create_table "taggings", force: true do |t|
