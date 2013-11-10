@@ -55,3 +55,5 @@ gem 'acts-as-taggable-on'
 gem 'slim'
 gem 'rails_12factor', group: :production
 gem 'unicorn'
+gem 'unf'
+gem 'fog'
