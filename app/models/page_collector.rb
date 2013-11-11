@@ -4,27 +4,6 @@ require "uri"
 class PageCollector
   attr_accessor :mail
 
-  URLS = [
-    {
-      name: :mercury,
-      url: "http://www.portlandmercury.com/portland/EventSearch?eventCategory=807942&eventSection=807941&narrowByDate=Today",
-      #url: "http://localhost:8000/mercury.html"
-    },
-    {
-      name: :stranger,
-      url: "http://www.thestranger.com/gyrobase/EventSearch?eventSection=3208279&narrowByDate=Today",
-      #url: "http://localhost:8000/stranger.html"
-    },
-    # {
-    #   name: :nelcentro,
-    #   url: "http://www.nelcentro.com/blog/jazz/"
-    # },
-    # {
-    #   name: :duffsgarage,
-    #   url: "http://www.duffsgarage.com/"
-    # }
-  ]
-
   # https://devcenter.heroku.com/articles/scheduler
   # heroku run bin/job
   def self.collect
@@ -73,12 +52,12 @@ class PageCollector
     send_mail(mail)
   end
 
-  def urls
-    URLS
+  def event_sources
+    EventSource.all
   end
 
   def downloads
-    @downloads ||= urls.map do |u|
+    @downloads ||= event_sources.map do |u|
       response = http_fetch(u[:url])
       initialize_page_download(u, response.body)
     end

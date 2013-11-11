@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131109230701) do
+ActiveRecord::Schema.define(version: 20131111063024) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,9 +78,9 @@ ActiveRecord::Schema.define(version: 20131109230701) do
     t.datetime "downloaded_at",   null: false
     t.integer  "event_source_id", null: false
     t.string   "storage_uri"
+    t.datetime "processed_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "processed_at"
   end
 
   create_table "taggings", force: true do |t|
