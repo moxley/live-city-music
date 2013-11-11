@@ -38,9 +38,7 @@ describe PageCollector do
   it 'stores to PageStorage' do
     PageStorage.should_receive(:store) do |page_download|
       page_download.downloaded_at.should be_nil
-      t = Time.now.utc
-      expected_storage_uri = "page_downloads/#{t.strftime('%Y/%m/%d/%H')}/mercury.html"
-      page_download.storage_uri.should eq expected_storage_uri
+      page_download.storage_uri.should eq page_download.calculate_storage_uri
     end
 
     collector.stub(http_fetch: response, send_mail: true, urls: [url_def])

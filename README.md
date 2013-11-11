@@ -13,6 +13,10 @@ Band information repository.
 
 * To run rails server or rails console, use foreman: `foreman rails server`, `foreman rails console`.
 
+# Application Patterns
+
+* Everything in lib/ should be application agnostic, except for lib/tasks/*.rake
+
 ## TODO
 
 * Tag relations

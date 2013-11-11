@@ -12,10 +12,10 @@ class PageDownload < ActiveRecord::Base
   end
 
   def calculate_storage_uri
-    path_1 = Time.now.utc.strftime('%Y/%m/%d/%H')
-    filename = "#{path_1}/#{source_name}.html"
+    time_path = Time.now.utc.strftime('%Y/%m/%d/%H')
+    filename = "#{source_name}.html"
 
-    storage_uri = "page_downloads/#{filename}"
+    "#{Rails.env}/page_downloads/#{time_path}/#{filename}"
   end
 
   def set_storage_uri=(_)
