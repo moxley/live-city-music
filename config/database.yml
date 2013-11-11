@@ -18,6 +18,7 @@ development:
   adapter: postgresql
   host: localhost
   encoding: unicode
+  user: bands
   database: bands_development
   pool: 5
   password:
