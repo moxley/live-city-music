@@ -6,8 +6,9 @@ describe PageCollector do
   let(:url_def) { {name: :mercury, url: 'http://foo.com/bar.html'} }
 
   it 'fetches web pages and delivers them via email' do
+    collector.stub(urls: [url_def])
     collector.should_receive(:http_fetch).at_least(:once) { response }
-    date = Time.now.strftime('%Y-%m-%d')
+    date = Time.now.utc.strftime('%Y-%m-%dT%H')
     collector.should_receive(:send_mail) do |mail|
       mail.to.should eq ['moxley.stratton@gmail.com']
       mail.attachments.map(&:filename).should include "mercury-#{date}.html"
@@ -20,8 +21,6 @@ describe PageCollector do
 
   it 'creates PageDownloads for every downloaded page' do
     collector.stub(http_fetch: response, send_mail: true, urls: [url_def])
-    date = Time.now.strftime('%Y-%m-%d')
-
     PageStorage.stub(store: true)
 
     expect {
@@ -39,8 +38,8 @@ describe PageCollector do
   it 'stores to PageStorage' do
     PageStorage.should_receive(:store) do |page_download|
       page_download.downloaded_at.should be_nil
-      t = Time.now
-      expected_storage_uri = "page_downloads/#{t.year}/#{t.month}/#{t.day}/mercury.html"
+      t = Time.now.utc
+      expected_storage_uri = "page_downloads/#{t.strftime('%Y/%m/%d/%H')}/mercury.html"
       page_download.storage_uri.should eq expected_storage_uri
     end
 

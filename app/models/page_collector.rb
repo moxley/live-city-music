@@ -37,31 +37,24 @@ class PageCollector
   end
 
   def store_downloads
-    downloads.map do |df|
-      page_download = initialize_page_download(df)
-
+    downloads.map do |page_download|
       # Store to S3
       PageStorage.store(page_download)
 
-      page_download.downloaded_at = Time.now
+      page_download.downloaded_at = Time.now.utc
       page_download.save!
     end
   end
 
-  def initialize_page_download(df)
-    event_source = find_or_create_event_source(df[:name], df[:url])
+  def initialize_page_download(url_info, content)
+    event_source = find_or_initialize_event_source(url_info[:name], url_info[:url])
 
-    path_1 = Time.now.strftime('%Y/%m/%d')
-    filename = "#{path_1}/#{df[:name]}.html"
-
-    storage_uri = "page_downloads/#{filename}"
-    PageDownload.new event_source: event_source, storage_uri: storage_uri
+    PageDownload.new event_source: event_source, set_storage_uri: true, content: content
   end
 
-  def find_or_create_event_source(name, url)
+  def find_or_initialize_event_source(name, url)
     event_source = EventSource.where(name: name).first_or_initialize
     event_source.url ||= url
-    event_source.save! if event_source.new_record? || event_source.changed?
     event_source
   end
 
@@ -70,16 +63,12 @@ class PageCollector
     out.puts "PageCollector\n"
     out.puts "Downloads:"
 
-    dls = downloads.map do |df|
-      df.merge filename: email_filename(df[:name], df[:timestamp])
-    end
-
-    dls.each do |df|
-      out.puts "  #{df[:filename]}: #{df[:content].length}"
+    downloads.each do |page_download|
+      out.puts "  #{page_download.storage_uri}: #{page_download.content.length}"
     end
     body = out.string
 
-    mail = create_mail(body, dls)
+    mail = create_mail(body)
 
     send_mail(mail)
   end
@@ -91,24 +80,19 @@ class PageCollector
   def downloads
     @downloads ||= urls.map do |u|
       response = http_fetch(u[:url])
-      { name: u[:name], url: u[:url], timestamp: Time.now, content: response.body }
+      initialize_page_download(u, response.body)
     end
   end
 
-  # TODO remove
-  def email_filename(source_name, timestamp)
-    date = timestamp.strftime('%Y-%m-%d')
-    "#{source_name}-#{date}.html"
-  end
-
-  def create_mail(body, downloads)
+  def create_mail(body)
+    downloads = self.downloads
     @mail = Mail.new do
       to      'moxley.stratton@gmail.com'
       from    'moxley.stratton@gmail.com'
       subject 'Live music downloads'
       body    body
-      downloads.each do |df|
-        add_file df
+      downloads.each do |page_download|
+        add_file filename: page_download.email_filename, content: page_download.content
       end
     end
   end

@@ -18,6 +18,6 @@ class PageStorage
   def store
     StorageHelper.store(directory_name,
                         page_download.storage_uri,
-                        page_download.body)
+                        page_download.content)
   end
 end
