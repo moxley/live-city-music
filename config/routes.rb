@@ -6,6 +6,9 @@ Bands::Application.routes.draw do
   # root 'welcome#index'
   root 'homepage#index'
 
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
