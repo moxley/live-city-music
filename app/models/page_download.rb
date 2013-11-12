@@ -1,5 +1,5 @@
 class PageDownload < ActiveRecord::Base
-  attr_accessor :content
+  attr_accessor :content, :env
   belongs_to :event_source
 
   def source_name
@@ -12,13 +12,21 @@ class PageDownload < ActiveRecord::Base
   end
 
   def calculate_storage_uri
-    time_path = Time.now.utc.strftime('%Y/%m/%d/%H')
+    time_path = (downloaded_at || Time.now).utc.strftime('%Y/%m/%d/%H')
     filename = "#{source_name}.html"
 
-    "#{Rails.env}/page_downloads/#{time_path}/#{filename}"
+    "#{env}/page_downloads/#{time_path}/#{filename}"
+  end
+
+  def env
+    @env ||= Rails.env
   end
 
   def set_storage_uri=(_)
+    self.set_storage_uri
+  end
+
+  def set_storage_uri
     self.storage_uri ||= calculate_storage_uri
   end
 end
