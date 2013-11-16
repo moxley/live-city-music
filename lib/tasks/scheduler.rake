@@ -4,3 +4,10 @@ task :collect_pages => :environment do
   PageCollector.collect
   puts "done."
 end
+
+desc "Runs genre calculation job"
+task calculate_genres: :environment do
+  puts "Firing off genre calculation jobs..."
+  GenreJob.perform
+  puts "done."
+end
