@@ -1,4 +1,6 @@
-class MercuryImporter
+require 'page_parse/mercury_parser'
+
+class PageImport::MercuryImporter
   attr_accessor :city
 
   def initialize(opts={})
@@ -40,7 +42,7 @@ class MercuryImporter
   def import(file, opts = {})
     date = opts[:date] || date_from_file_path(file)
 
-    MercuryParser.new.raw_events_from_file(file).each do |raw_event|
+    PageParse::MercuryParser.new.raw_events_from_file(file).each do |raw_event|
       starts_at, ends_at = EventParser.times(raw_event.time_info, date: date)
       time_info = raw_event.time_info
       time_info = "#{date.strftime('%Y-%m-%d')} #{time_info}" if date

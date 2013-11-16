@@ -12,7 +12,7 @@ describe PageCollector do
   def stub_importer
     job = double(:job)
     job.stub(:import_page_download)
-    MercuryImporter.stub(delay: job)
+    PageImport::MercuryImporter.stub(delay: job)
   end
 
   it 'fetches web pages and delivers them via email' do
@@ -62,7 +62,7 @@ describe PageCollector do
     job.should_receive(:import_page_download) do |id|
       id.should be_kind_of(Fixnum)
     end
-    MercuryImporter.stub(delay: job)
+    PageImport::MercuryImporter.stub(delay: job)
 
     PageStorage.stub(store: true)
 
