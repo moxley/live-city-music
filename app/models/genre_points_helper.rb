@@ -9,4 +9,18 @@ module GenrePointsHelper
     end
     value
   end
+
+  def calculate_and_apply_genres
+    calculate_genre.each do |attrs|
+      genre = Genre.find_by_name(attrs[:genre_name])
+      gp = GenrePoint.where(target:     self,
+                            genre_id:   genre.id,
+                            point_type: attrs[:point_type],
+                            source:     attrs[:source]).
+                      first_or_initialize
+      gp.value = attrs[:value]
+      gp.save!
+      genre_points << gp
+    end
+  end
 end
