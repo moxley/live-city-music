@@ -21,14 +21,6 @@ class Artist < ActiveRecord::Base
            :calculate_name_embedded_points,
            to: :genre_calculator
 
-  # def calculate_and_save_genre_points
-  #   calculate_genre_points.each do |attrs|
-  #     genre = Genre.find_by_name(attrs[:genre_name])
-  #     gp = genre_points.build value: attrs[:value], point_type: attrs[:point_type], genre_id: genre.id, source: attrs[:source]
-  #     gp.save!
-  #   end
-  # end
-
   def genre_calculator
     @genre_calculator ||= GenreCalculator.new(self)
   end

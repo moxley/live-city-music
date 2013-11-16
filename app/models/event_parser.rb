@@ -18,16 +18,16 @@ module EventParser
 
   def self.times(time_string, opts = {})
     source_date = opts[:date]
-    if time_string =~ /^[^\d]*$/
-      [source_date, nil]
-    else
-      parsed_time = Time.parse(time_string)
-      if source_date
-        d = source_date
-        p = parsed_time
-        parsed_time = Time.new(d.year, d.month, d.day, p.hour, p.min)
-      end
-      [parsed_time, nil]
-    end
+    return [source_date, nil] unless time_string =~ /\d/
+    
+    [parse_time(time_string, source_date), nil]
+  end
+
+  def self.parse_time(time_string, source_date)
+    t = Time.parse(time_string)
+    return t unless source_date
+
+    d = source_date
+    Time.new(d.year, d.month, d.day, t.hour, t.min)
   end
 end
