@@ -32,6 +32,7 @@ GEM
       robotex (>= 1.0.0)
     arel (4.0.0)
     atomic (1.1.14)
+    bcrypt-ruby (3.1.2)
     builder (3.1.4)
     celluloid (0.15.2)
       timers (~> 1.1.0)
@@ -43,6 +44,12 @@ GEM
       execjs
     coffee-script-source (1.6.3)
     connection_pool (1.1.0)
+    devise (3.2.0)
+      bcrypt-ruby (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 3.2.6, < 5)
+      thread_safe (~> 0.1)
+      warden (~> 1.2.3)
     diff-lcs (1.2.4)
     erubis (2.7.0)
     excon (0.28.0)
@@ -80,6 +87,7 @@ GEM
     net-ssh (2.7.0)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
+    orm_adapter (0.5.0)
     pg (0.17.0)
     polyglot (0.3.3)
     rack (1.5.2)
@@ -177,6 +185,8 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    warden (1.2.3)
+      rack (>= 1.0)
 
 PLATFORMS
   ruby
@@ -185,6 +195,7 @@ DEPENDENCIES
   acts-as-taggable-on
   anemone
   coffee-rails (~> 4.0.0)
+  devise
   fog
   jbuilder (~> 1.2)
   jquery-rails
