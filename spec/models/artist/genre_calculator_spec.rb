@@ -26,7 +26,10 @@ describe Artist::GenreCalculator do
       point_values = artist.calculate_genre
       point_values.length.should eq 1
       point_item_should_match point_values[0],
-                              {value: 1.0, point_type: 'user_tag', genre_name: 'funk', source: tagger}
+                              { value:      1.0,
+                                point_type: 'user_tag',
+                                genre_name: 'funk',
+                                source:     tagger }
     end
 
     it "is one point of 0.5 for a peer's genre tag" do
@@ -37,7 +40,7 @@ describe Artist::GenreCalculator do
                               { value:      0.5,
                                 point_type: 'peer_user_tag',
                                 genre_name: 'funk',
-                                source:     peer_artist}
+                                source:     peer_artist }
     end
 
     it "is one point of 1.0 for a user tag and one point of 0.5 for a peer's user tag" do

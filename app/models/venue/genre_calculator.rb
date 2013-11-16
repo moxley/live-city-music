@@ -11,10 +11,8 @@ class Venue::GenreCalculator
   end
 
   def calculate_genre
-    points = []
-    points += calculate_user_tagged_points
-    points += calculate_name_embedded_points
-    points
+    calculate_user_tagged_points +
+    calculate_name_embedded_points
   end
 
   def calculate_name_embedded_points

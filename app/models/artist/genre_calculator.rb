@@ -1,3 +1,5 @@
+# Infers musical genre for a given artist, based on the artist's name,
+# peers played with, and venues played at.
 class Artist::GenreCalculator
   attr_accessor :artist, :points_by_genre, :points_by_genre_name_and_point_type
 
@@ -15,13 +17,9 @@ class Artist::GenreCalculator
   end
 
   def calculate_genre
-    points = []
-
-    points += calculate_user_tagged_points
-    points += calculate_name_embedded_points
-    points += calculate_points_from_peers
-
-    points
+    calculate_user_tagged_points +
+    calculate_name_embedded_points +
+    calculate_points_from_peers
   end
 
   def calculate_name_embedded_points
@@ -29,18 +27,27 @@ class Artist::GenreCalculator
   end
 
   def calculate_points_from_peers
-    points = []
-    played_with.each do |peer|
-      # user-tagged genre
-      points += peer.calculate_user_tagged_points.map do |p|
-        {point_type: 'peer_user_tag', genre_name: p[:genre_name], value: 0.5, source: peer}
-      end
-
-      # artist name-embedded genre
-      points += peer.calculate_name_embedded_points.map do |p|
-        {point_type: 'peer_name', genre_name: p[:genre_name], value: 0.25, source: peer}
-      end
+    played_with.to_a.sum([]) do |peer|
+      calculate_points_from_peer(peer)
     end
-    points
+  end
+
+  def calculate_points_from_peer(peer)
+    calculate_peer_user_tagged_points(peer) +
+    calculate_peer_name_embedded_points(peer)
+  end
+
+  # Peer's user-tagged genre
+  def calculate_peer_user_tagged_points(peer)
+    peer.calculate_user_tagged_points.map { |p|
+      {point_type: 'peer_user_tag', genre_name: p[:genre_name], value: 0.5, source: peer}
+    }
+  end
+
+  # Peer's name-embedded genre
+  def calculate_peer_name_embedded_points(peer)
+    peer.calculate_name_embedded_points.map { |p|
+      {point_type: 'peer_name', genre_name: p[:genre_name], value: 0.25, source: peer}
+    }
   end
 end
