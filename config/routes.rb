@@ -8,7 +8,7 @@ Bands::Application.routes.draw do
   root 'homepage#index'
 
   require 'sidekiq/web'
-  authenticate :user do
+  authenticate :user, lambda(&:admin?) do
     mount Sidekiq::Web => '/sidekiq'
   end
 
