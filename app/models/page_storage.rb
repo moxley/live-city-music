@@ -7,6 +7,10 @@ class PageStorage
     PageStorage.new(page_download).store
   end
 
+  def self.fetch(page_download)
+    PageStorage.new(page_download).fetch
+  end
+
   def initialize(page_download)
     @page_download = page_download
   end
@@ -19,5 +23,9 @@ class PageStorage
     StorageHelper.store(directory_name,
                         page_download.storage_uri,
                         page_download.content)
+  end
+
+  def fetch
+    StorageHelper.fetch(directory_name, page_download.storage_uri)
   end
 end

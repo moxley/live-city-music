@@ -2,6 +2,8 @@ class PageDownload < ActiveRecord::Base
   attr_accessor :content, :env
   belongs_to :event_source
 
+  validates_presence_of :downloaded_at, :event_source
+
   def source_name
     event_source.name
   end
@@ -28,5 +30,9 @@ class PageDownload < ActiveRecord::Base
 
   def set_storage_uri
     self.storage_uri ||= calculate_storage_uri
+  end
+
+  def content
+    @content ||= PageStorage.fetch(self)
   end
 end

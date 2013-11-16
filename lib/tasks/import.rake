@@ -1,14 +1,13 @@
 require_relative '../../config/environment'
 
-desc 'import HTML from a web page'
+desc 'import event data from HTML files'
 task :import do
   Dir.glob('tmp/imports/*.html').each do |path|
-    if path =~ /stranger/
-      importer = MercuryImporter.for_stranger
+    importer = if path =~ /stranger/
+      MercuryImporter.for_stranger
     else
-      importer = MercuryImporter.for_mercury
+      MercuryImporter.for_mercury
     end
-    month, day = path[/(\d+-\d+)/, 1].split('-')
     importer.import(File.new(path))
   end
 end

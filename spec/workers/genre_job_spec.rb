@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe GenreJob do
-  let(:tagger) { User.create! email: 'a@b.com' }
+  include ModelHelper
+
   let(:venue) { Venue.create! name: 'v1' }
   let(:artist) { Artist.create! name: 'a1' }
   before(:each) do

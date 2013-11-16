@@ -4,6 +4,16 @@ describe PageCollector do
   let(:response) { OpenStruct.new(body: '<html>foo</html>') }
   let(:collector) { PageCollector.new }
   let(:event_source) { EventSource.create name: 'mercury', url: 'http://foo.com/bar.html' }
+  let(:stubbed_collector) do
+    collector.stub(http_fetch: response, send_mail: true, event_sources: [event_source])
+    collector
+  end
+
+  def stub_importer
+    job = double(:job)
+    job.stub(:import_page_download)
+    MercuryImporter.stub(delay: job)
+  end
 
   it 'fetches web pages and delivers them via email' do
     collector.stub(event_sources: [event_source])
@@ -15,6 +25,7 @@ describe PageCollector do
     end
 
     PageStorage.stub(store: true)
+    stub_importer
 
     collector.collect
   end
@@ -22,6 +33,7 @@ describe PageCollector do
   it 'creates PageDownloads for every downloaded page' do
     collector.stub(http_fetch: response, send_mail: true, event_sources: [event_source])
     PageStorage.stub(store: true)
+    stub_importer
 
     expect {
       collector.collect
@@ -40,8 +52,20 @@ describe PageCollector do
       page_download.storage_uri.should eq page_download.calculate_storage_uri
     end
 
-    collector.stub(http_fetch: response, send_mail: true, event_sources: [event_source])
+    stub_importer
 
-    collector.collect
+    stubbed_collector.collect
+  end
+
+  it 'fires off jobs to import each downloaded page' do
+    job = double(:job)
+    job.should_receive(:import_page_download) do |id|
+      id.should be_kind_of(Fixnum)
+    end
+    MercuryImporter.stub(delay: job)
+
+    PageStorage.stub(store: true)
+
+    stubbed_collector.collect
   end
 end

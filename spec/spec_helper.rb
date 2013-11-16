@@ -40,3 +40,6 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 end
+
+require 'sidekiq/testing'
+Sidekiq::Testing.inline!

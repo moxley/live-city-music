@@ -22,6 +22,8 @@ class PageCollector
 
       page_download.downloaded_at = Time.now.utc
       page_download.save!
+
+      MercuryImporter.delay.import_page_download(page_download.id)
     end
   end
 

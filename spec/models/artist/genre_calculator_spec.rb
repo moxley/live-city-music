@@ -1,9 +1,10 @@
 require 'spec_helper'
 
 describe Artist::GenreCalculator do
+  include ModelHelper
+
   def create_artist(name); Artist.create!(name: name); end
   let(:artist) { create_artist 'a1' }
-  let(:tagger) { User.create! email: 'a@b.com' }
   let(:venue) { Venue.new name: "Al's Den" }
   let(:event) { Event.create! title: 'e1', venue: venue }
   def peer_artist(name = 'a2')

@@ -3,18 +3,35 @@ class StorageHelper
     new.store(directory_name, key, body)
   end
 
+  def self.fetch(directory_name, key)
+    new.fetch(directory_name, key)
+  end
+
   def self.connection
     new.connection
   end
 
   def store(directory_name, key, body, opts = {})
-    directory = connection.directories.detect { |d| d.key == directory_name }
-    raise "Directory not found: #{directory_name}" unless directory
+    directory = require_directory(directory_name)
     file = directory.files.create(
       :key    => key,
       :body   => body,
       :public => opts[:public] ? true : false
     )
+  end
+
+  def fetch(directory_name, key)
+    directory = require_directory(directory_name)
+    file = directory.files.get(key) or raise "File not found: #{directory_name}/#{key}"
+    file.body
+  end
+
+  def require_directory(directory_name)
+    find_directory(directory_name) or raise "Directory not found: #{directory_name}"
+  end
+
+  def find_directory(directory_name)
+    connection.directories.detect { |d| d.key == directory_name }
   end
 
   def connection
