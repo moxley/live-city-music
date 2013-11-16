@@ -1,0 +1,24 @@
+doctype html
+html
+  head
+    title Bandlist
+    = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = csrf_meta_tags
+
+    h1 Bandlist
+
+    nav
+      ul
+        li
+          a href="/" Home
+        li
+          - if user_signed_in?
+            = link_to('Log out', destroy_user_session_path, :method => :delete)
+          - else
+            = link_to('Log in', new_user_session_path)
+
+    p.notice = notice
+    p.alert = alert
+
+    = yield
