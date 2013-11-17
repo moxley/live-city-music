@@ -2,8 +2,9 @@ require 'spec_helper'
 require 'page_parse/styles_of_music_parser'
 
 describe PageParse::StylesOfMusicParser do
-  subject(:parser) { PageParse::StylesOfMusicParser.new(file) }
-  let(:file) { File.new("spec/fixtures/html/list_of_styles.html") }
+  include ModelHelper
+
+  subject(:parser) { PageParse::StylesOfMusicParser.new(list_of_styles_file) }
 
   describe '#styles' do
     it 'returns an list of style names' do

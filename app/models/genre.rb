@@ -1,25 +1,16 @@
-class Genre
-  attr_accessor :id, :name
+require 'page_parse/styles_of_music_parser'
+
+class Genre < ActiveRecord::Base
   GENRES = [
     {id: 1, name: 'jazz'},
     {id: 2, name: 'country'},
     {id: 3, name: 'funk'},
   ]
 
-  def self.all
-    GENRES.map do |h|
-      g = Genre.new
-      g.id = h[:id]
-      g.name = h[:name]
-      g
+  def self.import_from_file(file)
+    parser = PageParse::StylesOfMusicParser.new(file)
+    parser.styles.each do |style_name|
+      Genre.create! name: style_name
     end
-  end
-
-  def self.find_by_name(name)
-    all.detect { |g| g.name == name }
-  end
-
-  def self.find(id)
-    all.detect { |g| g.id == id }
   end
 end

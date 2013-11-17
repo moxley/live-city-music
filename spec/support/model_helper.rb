@@ -18,4 +18,8 @@ module ModelHelper
   def page_content_with_single_event
     File.read("spec/fixtures/html/single_event.html")
   end
+
+  def list_of_styles_file
+    File.new('spec/fixtures/html/list_of_styles.html')
+  end
 end
