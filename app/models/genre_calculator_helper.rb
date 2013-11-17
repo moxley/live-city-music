@@ -1,4 +1,4 @@
-class GenreCalculatorCommon
+class GenreCalculatorHelper
   attr_accessor :calculator
 
   def initialize(calculator)
