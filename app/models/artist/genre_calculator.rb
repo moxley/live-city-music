@@ -7,6 +7,7 @@ class Artist::GenreCalculator
            :genre_taggings,
            :played_with,
            :venues,
+           :genre_util,
            to: :artist
 
   delegate :calculate_user_tagged_points,

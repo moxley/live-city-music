@@ -19,4 +19,8 @@ class Venue < ActiveRecord::Base
   def genre_points_helper
     @genre_points_helper ||= GenrePointsHelper.new(self)
   end
+
+  def genre_util
+    @genre_util ||= GenreUtil.new
+  end
 end

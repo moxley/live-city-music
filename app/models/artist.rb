@@ -29,6 +29,10 @@ class Artist < ActiveRecord::Base
     @genre_points_helper ||= GenrePointsHelper.new(self)
   end
 
+  def genre_util
+    @genre_util ||= GenreUtil.new
+  end
+
   def played_with
     Artist.
       joins('JOIN artists_events ae ON ae.artist_id = artists.id AND ae.artist_id != %d' % id).

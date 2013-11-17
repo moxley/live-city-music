@@ -3,6 +3,7 @@ class Venue::GenreCalculator
 
   delegate :name,
            :genre_taggings,
+           :genre_util,
            to: :venue
 
   delegate :calculate_user_tagged_points,
