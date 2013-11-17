@@ -1,10 +1,11 @@
-module GenreUtil
-  extend self
-
+class GenreUtil
   def genres_in_name(name)
-    all_genres = Genre::GENRES.map { |g| g[:name].downcase }
-    name.downcase.split.select do |n|
-      n.in?(all_genres)
+    name.split.map(&:parameterize).select do |n|
+      n.in?(all_parameterized_genres)
     end
+  end
+
+  def all_parameterized_genres
+    @all_normalized_genres ||= Genre.order("LENGTH(name) DESC").pluck(:name).map(&:parameterize)
   end
 end

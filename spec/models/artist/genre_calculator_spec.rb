@@ -65,6 +65,7 @@ describe Artist::GenreCalculator do
     end
 
     it "is one point of 0.5 for a artist name embedded genre" do
+      Genre.create! name: 'funk'
       artist = create_artist('The Funk Brothers')
       point_values = artist.calculate_genre
       point_values.length.should eq 1
@@ -78,6 +79,7 @@ describe Artist::GenreCalculator do
     end
 
     it "is one point of 0.25 for a peer artist name embedded genre" do
+      Genre.create! name: 'funk'
       peer_artist('The Funk Brothers')
       point_values = artist.calculate_genre
       point_values.length.should eq 1

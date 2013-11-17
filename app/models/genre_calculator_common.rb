@@ -6,8 +6,12 @@ module GenreCalculatorCommon
   end
 
   def calculate_name_embedded_points_for(obj)
-    GenreUtil.genres_in_name(obj.name).map do |name|
+    genre_util.genres_in_name(obj.name).map do |name|
       {point_type: 'name', genre_name: name, value: 0.5, source: obj}
     end
+  end
+
+  def genre_util
+    @genre_util ||= GenreUtil.new
   end
 end
