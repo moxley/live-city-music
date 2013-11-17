@@ -1,6 +1,12 @@
-module GenreCalculatorCommon
+class GenreCalculatorCommon
+  attr_accessor :calculator
+
+  def initialize(calculator)
+    @calculator = calculator
+  end
+
   def calculate_user_tagged_points
-    genre_taggings.map do |t|
+    calculator.genre_taggings.map do |t|
       {point_type: 'user_tag', genre_name: t.tag.name, value: 1.0, source: t.tagger}
     end
   end

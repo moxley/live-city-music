@@ -3,13 +3,15 @@
 class Artist::GenreCalculator
   attr_accessor :artist, :points_by_genre, :points_by_genre_name_and_point_type
 
-  include GenreCalculatorCommon
-
   delegate :name,
            :genre_taggings,
            :played_with,
            :venues,
            to: :artist
+
+  delegate :calculate_user_tagged_points,
+           :calculate_name_embedded_points_for,
+           to: :genre_calculator_common
 
   def initialize(artist)
     @artist = artist
@@ -49,5 +51,9 @@ class Artist::GenreCalculator
     peer.calculate_name_embedded_points.map { |p|
       {point_type: 'peer_name', genre_name: p[:genre_name], value: 0.25, source: peer}
     }
+  end
+
+  def genre_calculator_common
+    @genre_calculator_common ||= GenreCalculatorCommon.new(self)
   end
 end
