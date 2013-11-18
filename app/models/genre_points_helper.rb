@@ -1,6 +1,9 @@
 class GenrePointsHelper
   attr_accessor :target
 
+  delegate :genre_util, to: :target
+  delegate :fuzzy_find, to: :genre_util
+
   def initialize(target)
     @target = target
   end
@@ -18,7 +21,8 @@ class GenrePointsHelper
 
   def calculate_and_apply_genres
     target.calculate_genre.each do |attrs|
-      genre = Genre.find_by_name(attrs[:genre_name])
+      genre = fuzzy_find(attrs[:genre_name])
+      raise "No genre defined for #{attrs[:genre_name].inspect}" unless genre
       gp = GenrePoint.where(target:     target,
                             genre_id:   genre.id,
                             point_type: attrs[:point_type],

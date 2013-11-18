@@ -6,7 +6,7 @@ describe GenreJob do
   let(:venue) { Venue.create! name: 'v1' }
   let(:artist) { Artist.create! name: 'a1' }
   before(:each) do
-    Genre.create! name: 'jazz'
+    Genre.create! name: 'Jazz'
     tagger.tag(venue, with: 'jazz', on: :genres)
     tagger.tag(artist, with: 'jazz', on: :genres)
     GenreJob.perform
@@ -14,7 +14,7 @@ describe GenreJob do
 
   it 'creates genre_point records for user-tagged venue genres' do
     gp = venue.genre_points.first
-    gp.genre.name.should eq 'jazz'
+    gp.genre.name.should eq 'Jazz'
     gp.value.should eq 1.0
   end
 
