@@ -1,7 +1,8 @@
 class GenreUtil
   def genres_in_name(name)
-    name.split.map(&:parameterize).select do |n|
-      fuzzy_find(n)
+    name_words = name.split.map(&:parameterize)
+    Genre::NAME_EMBEDDED_GENRES.map(&:parameterize).select do |n|
+      name_words.include?(n)
     end
   end
 
@@ -17,7 +18,6 @@ class GenreUtil
   end
 
   def fuzzy_find(name)
-    normalized_name = name.parameterize
-    genres_by_name_key[name]
+    genres_by_name_key[name.parameterize]
   end
 end
