@@ -1,5 +1,9 @@
 require "capistrano/setup"
 
+#set :whenever_command, "bundle exec whenever"
+set :whenever_environment, defer { stage }
+require "whenever/capistrano"
+
 set :stages, ["production"]
 set :application, 'bandlist'
 set :repo_url, 'git@heroku.com:bandlist.git'
@@ -8,7 +12,7 @@ set :repo_url, 'git@heroku.com:bandlist.git'
 
 # set :deploy_to, '/var/www/my_app'
 set :scm, :git
-set :branch, proc { ENV['branch'] || "master" }
+set :branch, ENV['branch'] || "master"
 #set :repository, "git@heroku.com:bandlist.git"
 set :user, "deploy"
 set :use_sudo, false
@@ -24,7 +28,6 @@ role :all, %w{deploy@aws1}
 # set :log_level, :debug
 # set :pty, true
 
-# set :linked_files, %w{config/database.yml}
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
