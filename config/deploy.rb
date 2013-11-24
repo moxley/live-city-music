@@ -8,7 +8,7 @@ set :repo_url, 'git@heroku.com:bandlist.git'
 
 # set :deploy_to, '/var/www/my_app'
 set :scm, :git
-set :brand, "master"
+set :branch, proc { ENV['branch'] || "master" }
 #set :repository, "git@heroku.com:bandlist.git"
 set :user, "deploy"
 set :use_sudo, false
