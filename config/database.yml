@@ -57,5 +57,5 @@ production:
   encoding: unicode
   database: bands_production
   pool: 5
-  username: bands
+  username: deploy
   password:
