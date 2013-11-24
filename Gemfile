@@ -60,4 +60,4 @@ gem 'fog'
 gem 'sidekiq'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'devise'
-gem 'whenever', require: false
+gem 'whenever', github: 'phallstrom/whenever', require: false

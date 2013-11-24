@@ -1,7 +1,7 @@
 require "capistrano/setup"
 
 #set :whenever_command, "bundle exec whenever"
-set :whenever_environment, defer { stage }
+set :whenever_environment, -> { stage }
 require "whenever/capistrano"
 
 set :stages, ["production"]
