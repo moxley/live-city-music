@@ -15,5 +15,5 @@ set :output, "/var/www/bandlist/shared/log/cron_log.log"
 # Learn more: http://github.com/javan/whenever
 
 every 1.minute do
-  command "echo 'heartbeat' > /var/www/bandslist/shared/log/production.log"
+  command "echo 'heartbeat' > /var/www/bandlist/shared/log/production.log"
 end
