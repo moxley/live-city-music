@@ -39,6 +39,6 @@ class StorageHelper
   end
 
   def access
-    {key_id: ENV['S3_KEY'], secret: ENV['S3_SECRET']}
+    {key_id: ENV['AWS_ACCESS_KEY'], secret: ENV['AWS_SECRET_KEY']}
   end
 end
