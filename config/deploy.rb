@@ -1,8 +1,7 @@
 require "capistrano/setup"
 
 #set :whenever_command, "bundle exec whenever"
-set :whenever_environment, -> { stage }
-require "whenever/capistrano"
+set :whenever_environment, -> { ENV['RAILS_ENV'] }
 
 set :stages, ["production"]
 set :application, 'bandlist'
