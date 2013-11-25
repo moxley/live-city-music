@@ -26,6 +26,8 @@ role :all, %w{deploy@aws1}
 
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
+set :bundle_flags, '--deployment --quiet'
+
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 # set :keep_releases, 5
 
