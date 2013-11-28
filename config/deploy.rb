@@ -101,13 +101,13 @@ namespace :sidekiq do
   desc "Start sidekiq workers"
   task :start do
     on roles(:app) do
-      sudo "start workers"
+      sudo "/etc/init.d/sidekiq start"
     end
   end
   desc "Stop sidekiq workers"
   task :stop do
     on roles(:app), :on_error => :continue do
-      sudo "stop workers"
+      sudo "/etc/init.d/sidekiq stop"
     end
   end
   desc "Restart sidekiq workers"
@@ -120,8 +120,8 @@ namespace :sidekiq do
 end
 
 namespace :unicorn do
-  desc "Start unicorn instances"
   %i(start stop restart reload).each do |t|
+    desc "#{t} unicorn instances"
     task t do
       opts = {}
       opts[:on_error] = :continue if t == 'stop'
