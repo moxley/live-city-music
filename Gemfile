@@ -59,3 +59,4 @@ gem 'sidekiq'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'devise'
 gem 'whenever', github: 'phallstrom/whenever', require: false
+gem 'heroku'

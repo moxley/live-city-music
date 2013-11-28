@@ -21,3 +21,4 @@
 TODO.md
 .env
 dump.rdb
+vendor/bundle/*
