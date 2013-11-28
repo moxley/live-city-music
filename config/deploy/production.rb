@@ -40,5 +40,3 @@ role :db,  %w{aws1}
 # setting per server overrides global ssh_options
 
 # fetch(:default_env).merge!(rails_env: :production)
-
-set :deploy_to, "/var/www/bandlist"
