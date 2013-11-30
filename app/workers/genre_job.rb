@@ -18,8 +18,7 @@ class GenreJob
 
   def perform_on(ar_class)
     ar_class.pluck(:id).each do |id|
-      seconds = rand(3600)
-      InstanceGenreJob.perform_in(seconds, ar_class.to_s, id)
+      InstanceGenreJob.perform_async(ar_class.to_s, id)
     end
   end
 
