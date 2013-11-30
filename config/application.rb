@@ -1,5 +1,15 @@
 require File.expand_path('../boot', __FILE__)
 
+# Read in ~/.env for secret config values
+if File.exists?("#{ENV['HOME']}/.env")
+  File.open("#{ENV['HOME']}/.env").each_line do |line|
+    line.strip!
+    line.sub!(/export /, '')
+    name, value = line.split('=')
+    ENV[name] = value
+  end
+end
+
 # Pick the frameworks you want:
 require "active_record/railtie"
 require "action_controller/railtie"
