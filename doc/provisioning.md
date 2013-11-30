@@ -21,13 +21,12 @@
 * Install PostgreSQL: https://www.digitalocean.com/community/articles/how-to-install-and-use-postgresql-on-ubuntu-12-04
   * sudo su - postgres
   * psql
-  * create user deploy;
-  * create database bands_production;
-  * grant all privileges on database bands_production to deploy;
+  * create user bands with password '?????';
+  * create database bands_production with owner=bands;
   * \q
   * exit
   * # As 'deploy':
-  * psql bands_production
+  * psql -U bands -h localhost --password bands_production
   * \q
 * Install Redis: http://redis.io/topics/quickstart
 * Install Git: https://www.digitalocean.com/community/articles/how-to-install-git-on-ubuntu-12-04

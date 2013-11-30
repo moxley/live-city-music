@@ -23,5 +23,5 @@ test:
 production:
   <<: *common
   database: bands_production
-  username: deploy
+  username: bands
   password: <%= ENV['DB_PASSWORD'] %>
