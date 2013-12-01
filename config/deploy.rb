@@ -17,15 +17,12 @@ set :ssh_options, { :forward_agent => true }
 set :keep_releases, 2
 role :all, %w{deploy@aws1}
 
-set :set_command_environment, -> { "source ~/.env" }
-set :bundle_cmd, -> { "#{fetch(:set_command_environment)} && bundle" }
-
-set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_dirs,  %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 set :bundle_flags, '--deployment --quiet'
-set :unicorn_conf, -> { "#{current_path}/config/unicorn.rb" }
-set :unicorn_pid, -> { "#{current_path}/tmp/pids/unicorn.pid" }
-set :sidekiq_pid, -> { "#{current_path}/tmp/pids/sidekiq.pid" }
-set :sidekiq_cmd, -> { "cd #{current_path} && #{fetch(:bundle_cmd)} exec sidekiq -d -i 0 -P #{fetch(:sidekiq_pid)} -e production -C #{current_path}/config/sidekiq.yml -L #{current_path}/log/sidekiq.log" }
+set :unicorn_conf, "#{current_path}/config/unicorn.rb"
+set :unicorn_pid,  "#{deploy_to}/shared/tmp/pids/unicorn.pid"
+set :sidekiq_pid,  "../shared/tmp/pids/sidekiq.pid"
+set :sidekiq_cmd, -> { "cd #{current_path} && bundle exec sidekiq -d -i 0 -P #{fetch(:sidekiq_pid)} -e production -C #{current_path}/config/sidekiq.yml -L #{current_path}/log/sidekiq.log" }
 
 def invoke_task(task)
   Rake::Task[task.to_s].invoke
