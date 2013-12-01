@@ -4,7 +4,7 @@ worker_processes Integer(ENV["WEB_CONCURRENCY"] || 3)
 timeout 15
 preload_app true
 stderr_path "log/unicorn.log"
-stdout_path "log/unicorn.log"
+stdout_path "log/#{ENV['RAILS_ENV']}.log"
 
 before_fork do |server, worker|
   Signal.trap 'TERM' do
