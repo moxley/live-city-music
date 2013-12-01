@@ -42,6 +42,7 @@ class PageCollector
   def email_downloads
     out = StringIO.new
     out.puts "PageCollector\n"
+    out.puts "Host: #{ENV['HOST']}"
     out.puts "Downloads:"
 
     downloads.each do |page_download|
