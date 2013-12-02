@@ -106,6 +106,7 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    method_source (0.8.2)
     mime-types (1.25)
     mini_portile (0.5.1)
     minitest (4.7.5)
@@ -230,6 +231,8 @@ GEM
       raindrops (~> 0.7)
     warden (1.2.3)
       rack (>= 1.0)
+    zeus (0.13.3)
+      method_source (>= 0.6.7)
 
 PLATFORMS
   ruby
@@ -262,3 +265,4 @@ DEPENDENCIES
   unf
   unicorn
   whenever!
+  zeus

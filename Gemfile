@@ -45,6 +45,7 @@ gem 'capistrano-rails', group: :development
 
 group :development, :test do
   gem 'rspec-rails', '~> 2.0'
+  gem 'zeus'
 end
 
 gem 'nokogiri'
