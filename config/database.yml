@@ -17,7 +17,7 @@ development:
 
 test:
   <<: *common
-  username: bands
+  #username: bands
   database: bands_test
 
 production:
