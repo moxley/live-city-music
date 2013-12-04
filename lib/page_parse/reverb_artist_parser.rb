@@ -7,20 +7,28 @@ module PageParse
       @genres = []
     end
 
-    def genres_for_artist_name(name)
-      parse_artist_pages(uri_for_name(name))
+    def get_artist_pages(artist_name)
+      uri = uri_for_name(artist_name)
+      artist_html = dependencies.fetch(uri)
+      return false unless artist_html
+
+      bio_uri = get_bio_uri(StringIO.new(artist_html))
+      return false unless bio_uri
+
+      bio_html = dependencies.fetch(bio_uri)
+      return false unless bio_html
+
+      g = get_genres(StringIO.new(bio_html))
+      return false unless g
+
+      @genres = g
+
+      true
     end
 
     private
 
-    def parse_artist_pages(source)
-      uri = get_bio_uri(source)
-      @genres = get_genres(uri)
-    end
-
     def source_to_doc(source)
-      source = StringIO.new(dependencies.fetch(source)) if source.kind_of?(URI)
-
       if source.kind_of?(File) || source.kind_of?(StringIO)
         Nokogiri::HTML(source)
       elsif source.kind_of?(Nokogiri::HTML::Document)
@@ -32,7 +40,7 @@ module PageParse
 
     def get_bio_uri(source)
       href = get_bio_href(source)
-      full_url(href)
+      full_uri(href)
     end
 
     def get_genres(source)
@@ -49,7 +57,7 @@ module PageParse
         end
       end
 
-      raise ArgumentError, "Genre not found in bio" if genre.blank?
+      return false if genre.blank?
 
       parse_genres(genre)
     end
@@ -58,13 +66,15 @@ module PageParse
       @dependencies ||= Dependencies.new
     end
 
-    def full_url(href)
+    def full_uri(href)
       URI("http://www.reverbnation.com#{href}")
     end
 
     class Dependencies
-      def fetch(url_string)
-        Net::HTTP.get(URI(url_string))
+      def fetch(uri)
+        res = Net::HTTP.get_response(URI(uri))
+        return nil unless res.is_a?(Net::HTTPSuccess)
+        res.body
       end
     end
 

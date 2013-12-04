@@ -11,8 +11,7 @@ describe PageParse::ReverbArtistParser do
   let(:artist_uri)     { URI("http://www.reverbnation.com/thestubbornlovers") }
   let(:artist_file)    { File.new("spec/fixtures/html/the_stubborn_lovers.html") }
   let(:bio_file)       { File.new("spec/fixtures/html/the_stubborn_lovers_bio.html") }
-  let(:bio_url_string) { "http://www.reverbnation.com/artist_3022790/bio" }
-  let(:bio_uri)        { URI(bio_url_string) }
+  let(:bio_uri)        { URI("http://www.reverbnation.com/artist_3022790/bio") }
   let(:genres)         { ['Americana', 'Alt Country', 'Roots'] }
 
   before do
@@ -20,9 +19,11 @@ describe PageParse::ReverbArtistParser do
     dependencies.should_receive(:fetch).with(bio_uri).and_return(bio_file.read)
   end
 
-  describe '#genres_for_artist_name' do
-    it 'returns genres for artist name' do
-      genres = parser.genres_for_artist_name(artist_name)
+  describe '#get_artist_pages' do
+    it 'returns true if the page exists' do
+      res = parser.get_artist_pages(artist_name)
+      res.should be_true
+      parser.genres.should eq genres
     end
   end
 end
