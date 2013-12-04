@@ -10,13 +10,10 @@ describe PageParse::ReverbArtistParser do
   let(:artist_name)    { "The Stubborn Lovers" }
   let(:artist_uri)     { URI("http://www.reverbnation.com/thestubbornlovers") }
   let(:artist_file)    { File.new("spec/fixtures/html/the_stubborn_lovers.html") }
-  let(:bio_file)       { File.new("spec/fixtures/html/the_stubborn_lovers_bio.html") }
-  let(:bio_uri)        { URI("http://www.reverbnation.com/artist_3022790/bio") }
   let(:genres)         { ['Americana', 'Alt Country', 'Roots'] }
 
   before do
     dependencies.should_receive(:fetch).with(artist_uri).and_return(artist_file.read)
-    dependencies.should_receive(:fetch).with(bio_uri).and_return(bio_file.read)
   end
 
   describe '#get_artist_pages' do
