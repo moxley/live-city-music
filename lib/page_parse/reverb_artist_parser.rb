@@ -2,6 +2,16 @@ module PageParse
   class ReverbArtistParser
     attr_accessor :genres
 
+    def self.get_artist_genres(artist_name)
+      get_artist_pages(artist_name).genres
+    end
+
+    def self.get_artist_pages(artist_name)
+      parser = new
+      parser.get_artist_pages(artist_name)
+      parser
+    end
+
     def initialize(opts = {})
       @dependencies = opts[:dependencies]
       @genres = []
