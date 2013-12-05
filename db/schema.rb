@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131118040523) do
+ActiveRecord::Schema.define(version: 20131205162424) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,21 @@ ActiveRecord::Schema.define(version: 20131118040523) do
   end
 
   add_index "genres", ["name"], name: "index_genres_on_name", unique: true, using: :btree
+
+  create_table "job_runs", force: true do |t|
+    t.string   "job_type",    limit: 30, null: false
+    t.string   "sub_type",    limit: 30
+    t.string   "target_type", limit: 30, null: false
+    t.integer  "target_id",              null: false
+    t.string   "status",      limit: 20
+    t.string   "error_id",    limit: 20
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "job_runs", ["error_id"], name: "index_job_runs_on_error_id", using: :btree
+  add_index "job_runs", ["job_type"], name: "index_job_runs_on_job_type", using: :btree
+  add_index "job_runs", ["target_type", "target_id"], name: "index_job_runs_on_target_type_and_target_id", using: :btree
 
   create_table "page_downloads", force: true do |t|
     t.datetime "downloaded_at",   null: false

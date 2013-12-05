@@ -1,3 +1,4 @@
+# Calculate genre by associations and name
 class GenreJob
   def self.perform
     new.perform
