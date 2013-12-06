@@ -45,7 +45,7 @@ class Artist < ActiveRecord::Base
   def add_genres!(source, names)
     names.each do |name|
       genre = dependencies.find_or_create_genre(name)
-      gp = dependencies.find_or_build_genre_point(target: self, genre: genre, point_type: 'self')
+      gp = dependencies.find_or_initialize_genre_point(target: self, genre: genre, point_type: 'self_tag')
       gp.update_attributes!(value: 2.0)
     end
   end
@@ -57,13 +57,21 @@ class Artist < ActiveRecord::Base
   private
 
   class Dependencies
-    def find_or_build_genre_point(attrs)
-      #constraints = {target_id: attrs}
-      attrs[:target].genre_points << GenrePoint.create!(attrs)
+    def find_or_initialize_genre_point(attrs)
+      %i[target genre point_type source].each do |a|
+        raise ArgumentError, "Missing :#{a}" if attrs[a].blank?
+      end
+      constraints = {target_id:   attrs[:target].id,
+                     target_type: attrs[:target].class.to_s,
+                     genre_id:    attrs[:genre].id,
+                     point_type:  attrs[:point_type],
+                     source_type: attrs[:source].class.to_s,
+                     source_id:   attrs[:source].id}
+      GenrePoint.where(constraints).first_or_initialize
     end
 
     def find_or_create_genre(name)
-      genre_util.fuzzy_find(name) || Genre.create!(name: g)
+      genre_util.fuzzy_find(name) || Genre.create!(name: name)
     end
 
     private
