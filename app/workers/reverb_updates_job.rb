@@ -12,7 +12,7 @@ class ReverbUpdatesJob
 
   def perform(artist_id)
     artist = dependencies.find_artist(artist_id)
-    artist.add_genres! dependencies.get_genres(artist.name)
+    artist.add_genres! :reverb, dependencies.get_genres(artist.name)
   end
 
   private
