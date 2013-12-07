@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ReverbUpdatesJob do
+describe UpdateArtistReverbJob do
   let(:dependencies) do
     double(:dependencies).tap do |d|
       d.stub(get_genres: genres)
@@ -8,7 +8,7 @@ describe ReverbUpdatesJob do
     end
   end
   let(:genres) { ['g1', 'g2'] }
-  subject(:job) { ReverbUpdatesJob.new(dependencies: dependencies) }
+  subject(:job) { UpdateArtistReverbJob.new(dependencies: dependencies) }
   let(:artist) do
     double(:artist).tap do |a|
       a.stub(name: 'a1')

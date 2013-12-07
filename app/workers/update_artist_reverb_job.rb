@@ -1,5 +1,5 @@
 # Updates an artist's info from reverbnation.com
-class ReverbUpdatesJob
+class UpdateArtistReverbJob
   include Sidekiq::Worker
 
   def initialize(opts = {})
