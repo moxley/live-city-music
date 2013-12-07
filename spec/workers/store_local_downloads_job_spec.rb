@@ -19,10 +19,10 @@ describe StoreLocalDownloadsJob do
 
   describe '#store' do
     it 'calls PageStorage.store with PageDownload' do
-      event_source = EventSource.create! name: 'mercury', url: 'foo'
+      data_source = DataSource.create! name: 'mercury', url: 'foo'
       PageStorage.should_receive(:store) do |page_download|
         page_download.downloaded_at.should be_present
-        page_download.event_source.should eq event_source
+        page_download.data_source.should eq data_source
         page_download.storage_uri.should eq "production/page_downloads/2013/10/01/23/mercury.html"
         page_download.content.should eq page_content
         page_download.env.should eq 'production'

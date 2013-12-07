@@ -3,9 +3,9 @@ require 'spec_helper'
 describe PageCollector do
   let(:response) { OpenStruct.new(body: '<html>foo</html>') }
   let(:collector) { PageCollector.new }
-  let(:event_source) { EventSource.create name: 'mercury', url: 'http://foo.com/bar.html' }
+  let(:data_source) { DataSource.create name: 'mercury', url: 'http://foo.com/bar.html' }
   let(:stubbed_collector) do
-    collector.stub(http_fetch: response, send_mail: true, event_sources: [event_source])
+    collector.stub(http_fetch: response, send_mail: true, data_sources: [data_source])
     collector
   end
 
@@ -16,7 +16,7 @@ describe PageCollector do
   end
 
   it 'fetches web pages and delivers them via email' do
-    collector.stub(event_sources: [event_source])
+    collector.stub(data_sources: [data_source])
     collector.should_receive(:http_fetch).at_least(:once) { response }
     date = Time.now.utc.strftime('%Y-%m-%dT%H')
     collector.should_receive(:send_mail) do |mail|
@@ -31,7 +31,7 @@ describe PageCollector do
   end
 
   it 'creates PageDownloads for every downloaded page' do
-    collector.stub(http_fetch: response, send_mail: true, event_sources: [event_source])
+    collector.stub(http_fetch: response, send_mail: true, data_sources: [data_source])
     PageStorage.stub(store: true)
     stub_importer
 
@@ -43,7 +43,7 @@ describe PageCollector do
 
     download.storage_uri.should be_present
 
-    download.event_source.should eq event_source
+    download.data_source.should eq data_source
   end
 
   it 'stores to PageStorage' do

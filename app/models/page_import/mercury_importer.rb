@@ -17,7 +17,7 @@ class PageImport::MercuryImporter
 
   def self.import_page_download(page_download_id)
     page_download = PageDownload.find(page_download_id)
-    source_name = page_download.event_source.name
+    source_name = page_download.data_source.name
     city = case source_name
     when 'stranger'
       'Seattle'

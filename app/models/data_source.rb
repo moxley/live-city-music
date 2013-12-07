@@ -1,3 +1,5 @@
 class DataSource < ActiveRecord::Base
-  self.table_name = 'event_sources'
+  has_many :page_downloads
+
+  validates_presence_of :name, :url
 end

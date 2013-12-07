@@ -28,15 +28,15 @@ class PageCollector
   end
 
   def initialize_page_download(url_info, content)
-    event_source = find_or_initialize_event_source(url_info[:name], url_info[:url])
+    data_source = find_or_initialize_data_source(url_info[:name], url_info[:url])
 
-    PageDownload.new event_source: event_source, set_storage_uri: true, content: content
+    PageDownload.new data_source: data_source, set_storage_uri: true, content: content
   end
 
-  def find_or_initialize_event_source(name, url)
-    event_source = EventSource.where(name: name).first_or_initialize
-    event_source.url ||= url
-    event_source
+  def find_or_initialize_data_source(name, url)
+    data_source = DataSource.where(name: name).first_or_initialize
+    data_source.url ||= url
+    data_source
   end
 
   def email_downloads
@@ -55,12 +55,12 @@ class PageCollector
     send_mail(mail)
   end
 
-  def event_sources
-    EventSource.all
+  def data_sources
+    DataSource.all
   end
 
   def downloads
-    @downloads ||= event_sources.map do |u|
+    @downloads ||= data_sources.map do |u|
       response = http_fetch(u[:url])
       initialize_page_download(u, response.body)
     end

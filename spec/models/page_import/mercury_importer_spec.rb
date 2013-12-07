@@ -6,10 +6,10 @@ describe PageImport::MercuryImporter do
   describe '.import_page_download' do
     let(:downloaded_at) { Time.new(2013, 10, 31).utc }
     let(:page_download) do
-      PageDownload.create! downloaded_at: downloaded_at, event_source: event_source
+      PageDownload.create! downloaded_at: downloaded_at, data_source: data_source
     end
-    let(:event_source) do
-      EventSource.create! name: 'mercury', url: 'http://example.com/mercury'
+    let(:data_source) do
+      DataSource.create! name: 'mercury', url: 'http://example.com/mercury'
     end
 
     it 'creates events' do

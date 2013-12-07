@@ -10,10 +10,10 @@ class StoreLocalDownloadsJob
     file_paths.each do |file_path|
       content = File.read(file_path)
       source_name, downloaded_at = parse_filename(file_path)
-      event_source = EventSource.find_by_name(source_name)
-      raise "Did not find event source #{source_name.inspect}" unless event_source
+      data_source = DataSource.find_by_name(source_name)
+      raise "Did not find event source #{source_name.inspect}" unless data_source
       page_download = PageDownload.new downloaded_at:   downloaded_at,
-                                       event_source:    event_source,
+                                       data_source:    data_source,
                                        content:         content,
                                        env:             'production'
       page_download.set_storage_uri
