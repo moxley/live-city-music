@@ -2,7 +2,7 @@ require "capistrano/setup"
 
 set :stages, ["production"]
 set :application, 'bandlist'
-set :repo_url, 'git@heroku.com:bandlist.git'
+set :repo_url, 'git@bitbucket.org:moxley/bandlist.git'
 
 set :deploy_to, "/var/www/bandlist"
 set :scm, :git
