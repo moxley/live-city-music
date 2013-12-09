@@ -65,8 +65,7 @@ describe Artist::GenreCalculator do
     end
 
     it "is one point of 0.5 for a artist name embedded genre" do
-      Genre.create! name: 'funk'
-      artist = create_artist('The Funk Brothers')
+      artist = create_artist('Ron Steen Jazz Jam')
       point_values = artist.calculate_genre
       point_values.length.should eq 1
 
@@ -74,13 +73,12 @@ describe Artist::GenreCalculator do
       point_item_should_match pv,
                               { value:      0.5,
                                 point_type: 'name',
-                                genre_name: 'funk',
+                                genre_name: 'jazz',
                                 source:     artist}
     end
 
     it "is one point of 0.25 for a peer artist name embedded genre" do
-      Genre.create! name: 'funk'
-      peer_artist('The Funk Brothers')
+      peer_artist('Richard Colvin & the NY Jazz Quartet')
       point_values = artist.calculate_genre
       point_values.length.should eq 1
 
@@ -88,7 +86,7 @@ describe Artist::GenreCalculator do
       point_item_should_match pv,
                               { value:      0.25,
                                 point_type: 'peer_name',
-                                genre_name: 'funk',
+                                genre_name: 'jazz',
                                 source:     peer_artist}
     end
   end

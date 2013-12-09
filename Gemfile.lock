@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/phallstrom/whenever.git
+  revision: 83be4c51352c0c7262bc7b147bbc4fda8d80074d
+  specs:
+    whenever (0.8.4)
+      activesupport (>= 2.3.4)
+      chronic (>= 0.6.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -27,6 +35,7 @@ GEM
       tzinfo (~> 0.3.37)
     acts-as-taggable-on (2.4.1)
       rails (>= 3, < 5)
+    addressable (2.3.5)
     anemone (0.7.2)
       nokogiri (>= 1.3.0)
       robotex (>= 1.0.0)
@@ -34,8 +43,19 @@ GEM
     atomic (1.1.14)
     bcrypt-ruby (3.1.2)
     builder (3.1.4)
+    capistrano (3.0.1)
+      i18n
+      rake (>= 10.0.0)
+      sshkit (>= 0.0.23)
+    capistrano-bundler (1.1.0)
+      capistrano (~> 3.0)
+      sshkit (>= 1.2.0)
+    capistrano-rails (1.1.0)
+      capistrano (>= 3.0.0)
+      capistrano-bundler (>= 1.0.0)
     celluloid (0.15.2)
       timers (~> 1.1.0)
+    chronic (0.10.2)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -65,6 +85,11 @@ GEM
       nokogiri (~> 1.5)
       ruby-hmac
     formatador (0.2.4)
+    heroku (2.25.0)
+      launchy (>= 0.3.2)
+      netrc (~> 0.7.1)
+      rest-client (~> 1.6.1)
+      rubyzip
     hike (1.2.3)
     i18n (0.6.5)
     jbuilder (1.5.2)
@@ -75,9 +100,13 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.1)
     kgio (2.8.1)
+    launchy (2.4.2)
+      addressable (~> 2.3)
+    libv8 (3.16.14.3)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    method_source (0.8.2)
     mime-types (1.25)
     mini_portile (0.5.1)
     minitest (4.7.5)
@@ -85,6 +114,7 @@ GEM
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-ssh (2.7.0)
+    netrc (0.7.7)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
     orm_adapter (0.5.0)
@@ -120,6 +150,9 @@ GEM
     redis (3.0.6)
     redis-namespace (1.3.2)
       redis (~> 3.0.4)
+    ref (1.0.5)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     robotex (1.0.0)
     rspec-core (2.14.6)
     rspec-expectations (2.14.3)
@@ -133,6 +166,7 @@ GEM
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
     ruby-hmac (0.4.0)
+    rubyzip (1.1.0)
     sass (3.2.12)
     sass-rails (4.0.1)
       railties (>= 4.0.0, < 5.0)
@@ -163,12 +197,22 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (~> 2.8)
+    sshkit (1.2.0)
+      net-scp (>= 1.1.2)
+      net-ssh
+      term-ansicolor
     temple (0.6.7)
+    term-ansicolor (1.2.2)
+      tins (~> 0.8)
+    therubyracer (0.12.0)
+      libv8 (~> 3.16.14.0)
+      ref
     thor (0.18.1)
     thread_safe (0.1.3)
       atomic
     tilt (1.4.1)
     timers (1.1.0)
+    tins (0.13.1)
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
@@ -187,6 +231,8 @@ GEM
       raindrops (~> 0.7)
     warden (1.2.3)
       rack (>= 1.0)
+    zeus (0.13.3)
+      method_source (>= 0.6.7)
 
 PLATFORMS
   ruby
@@ -194,9 +240,13 @@ PLATFORMS
 DEPENDENCIES
   acts-as-taggable-on
   anemone
+  capistrano
+  capistrano-bundler
+  capistrano-rails
   coffee-rails (~> 4.0.0)
   devise
   fog
+  heroku
   jbuilder (~> 1.2)
   jquery-rails
   nokogiri
@@ -209,7 +259,10 @@ DEPENDENCIES
   sidekiq
   sinatra (>= 1.3.0)
   slim
+  therubyracer
   turbolinks
   uglifier (>= 1.3.0)
   unf
   unicorn
+  whenever!
+  zeus

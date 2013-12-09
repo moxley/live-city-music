@@ -1,0 +1,5 @@
+Host aws1
+  HostName ec2-54-201-36-194.us-west-2.compute.amazonaws.com
+  User deploy
+  IdentityFile ~/.ssh/aws_rsa
+  ForwardAgent yes

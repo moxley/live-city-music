@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131117144136) do
+ActiveRecord::Schema.define(version: 20131207034704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20131117144136) do
   add_index "artists_events", ["artist_id"], name: "index_artists_events_on_artist_id", using: :btree
   add_index "artists_events", ["event_id"], name: "index_artists_events_on_event_id", using: :btree
 
-  create_table "event_sources", force: true do |t|
+  create_table "data_sources", force: true do |t|
     t.string   "name",       limit: 30, null: false
     t.string   "url",                   null: false
     t.datetime "created_at"
@@ -54,14 +54,6 @@ ActiveRecord::Schema.define(version: 20131117144136) do
 
   add_index "events", ["venue_id"], name: "index_events_on_venue_id", using: :btree
 
-  create_table "fetched_pages", force: true do |t|
-    t.string   "url",        null: false
-    t.text     "content",    null: false
-    t.datetime "fetched_at", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "genre_points", force: true do |t|
     t.string   "target_type", limit: 30,               null: false
     t.integer  "target_id",                            null: false
@@ -81,9 +73,24 @@ ActiveRecord::Schema.define(version: 20131117144136) do
 
   add_index "genres", ["name"], name: "index_genres_on_name", unique: true, using: :btree
 
+  create_table "job_runs", force: true do |t|
+    t.string   "job_type",    limit: 30, null: false
+    t.string   "sub_type",    limit: 30
+    t.string   "target_type", limit: 30, null: false
+    t.integer  "target_id",              null: false
+    t.string   "status",      limit: 20
+    t.string   "error_id",    limit: 20
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "job_runs", ["error_id"], name: "index_job_runs_on_error_id", using: :btree
+  add_index "job_runs", ["job_type"], name: "index_job_runs_on_job_type", using: :btree
+  add_index "job_runs", ["target_type", "target_id"], name: "index_job_runs_on_target_type_and_target_id", using: :btree
+
   create_table "page_downloads", force: true do |t|
-    t.datetime "downloaded_at",   null: false
-    t.integer  "event_source_id", null: false
+    t.datetime "downloaded_at",  null: false
+    t.integer  "data_source_id", null: false
     t.string   "storage_uri"
     t.datetime "imported_at"
     t.datetime "created_at"

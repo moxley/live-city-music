@@ -1,11 +1,11 @@
 class PageDownload < ActiveRecord::Base
   attr_accessor :content, :env
-  belongs_to :event_source
+  belongs_to :data_source
 
-  validates_presence_of :downloaded_at, :event_source
+  validates_presence_of :downloaded_at, :data_source
 
   def source_name
-    event_source.name
+    data_source.name
   end
 
   def email_filename
