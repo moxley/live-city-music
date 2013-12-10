@@ -11,8 +11,13 @@ class UpdateArtistReverbJob
   end
 
   def perform(artist_id)
-    artist = dependencies.find_artist(artist_id)
-    artist.add_genres! :reverb, dependencies.get_genres(artist.name)
+    Artist.transaction do
+      artist = dependencies.find_artist(artist_id)
+      genres = dependencies.get_genres(artist.name)
+      artist.add_genres! :reverb, genres
+
+      JobRun.create! target: artist, job_type: 'update_artist_from_source', sub_type: 'reverb', status: 'success'
+    end
   end
 
   private

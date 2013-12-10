@@ -18,6 +18,7 @@ describe UpdateArtistReverbJob do
   describe '#perform' do
     it 'saves genres to artist' do
       artist.should_receive(:add_genres!).with(:reverb, genres)
+      JobRun.should_receive(:create!).with(target: artist, job_type: 'update_artist_from_source', sub_type: 'reverb', status: 'success')
       job.perform(1)
     end
   end
