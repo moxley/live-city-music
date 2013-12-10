@@ -46,7 +46,7 @@ class Artist < ActiveRecord::Base
   def add_genres!(source, names)
     names.each do |name|
       genre = dependencies.find_or_create_genre(name)
-      gp = dependencies.find_or_initialize_genre_point(target: self, genre: genre, point_type: 'self_tag')
+      gp = dependencies.find_or_initialize_genre_point(target: self, genre: genre, point_type: 'self_tag', source: source)
       gp.update_attributes!(value: 2.0)
     end
   end

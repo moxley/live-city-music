@@ -48,6 +48,11 @@ group :development, :test do
   gem 'zeus'
 end
 
+group :test do
+  gem 'vcr'
+  gem 'webmock'
+end
+
 gem 'nokogiri'
 gem 'anemone'
 gem 'acts-as-taggable-on'
@@ -60,4 +65,5 @@ gem 'sidekiq'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'devise'
 gem 'whenever', github: 'phallstrom/whenever', require: false
-gem 'heroku'
+gem 'heroku' # TODO probably remove this
+gem 'sidekiq-rate-limiter'

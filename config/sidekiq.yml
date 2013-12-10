@@ -5,3 +5,6 @@ staging:
   :concurrency: 5
 production:
   :concurrency: 10
+:queues:
+  - default
+  - update_artist_from_source

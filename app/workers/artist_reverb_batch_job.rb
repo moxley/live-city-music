@@ -1,7 +1,7 @@
 class ArtistReverbBatchJob
   def perform
     artists.each do |a|
-      UpdateArtistReverbJob.perform_async(a)
+      UpdateArtistReverbJob.perform_async(a.id)
     end
   end
 

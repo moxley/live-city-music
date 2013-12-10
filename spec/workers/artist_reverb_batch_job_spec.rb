@@ -26,24 +26,28 @@ describe ArtistReverbBatchJob do
     Artist.create!(name: 'artist_never_updated')
   end
 
+  let(:artists_by_id) { {} }
+
   def create_artists
-    recent_artist
-    artist_updated_old
-    artist_never_updated
+    artists_by_id[recent_artist.id ] = recent_artist
+    artists_by_id[artist_updated_old.id] = artist_updated_old
+    artists_by_id[artist_never_updated.id] = artist_never_updated
   end
 
   subject(:job) { ArtistReverbBatchJob.new }
 
-  describe '#perform' do
-    it 'performs a JobRun on every applicable artist' do
+  describe '#perform', integration: true do
+    it 'performs a UpdateArtistReverbJob on every applicable artist' do
       create_artists
 
-      names = []
-      JobRun.stub(:perform_async) do |a|
-        names << a.name
+      artists = []
+      UpdateArtistReverbJob.stub(:perform_async) do |id|
+        artists << artists_by_id[id]
       end
 
       job.perform
+
+      names = artists.map(&:name)
 
       # Assert inclusion
       names.should_not include 'recent_artist'
