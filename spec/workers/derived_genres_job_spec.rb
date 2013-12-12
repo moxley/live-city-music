@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GenreJob do
+describe DerivedGenresJob do
   include ModelHelper
 
   let(:venue) { Venue.create! name: 'v1' }
@@ -12,7 +12,7 @@ describe GenreJob do
       jazz
       tagger.tag(venue, with: 'jazz', on: :genres)
       tagger.tag(artist, with: 'jazz', on: :genres)
-      GenreJob.perform
+      DerivedGenresJob.perform
     end
 
     it 'creates genre_point records for user-tagged venue genres' do
@@ -30,7 +30,7 @@ describe GenreJob do
   it "create a genre_point of 0.5 for a venue with \"Jazz\" in it's name" do
     jazz
     venue = Venue.create! name: 'Ivories Jazz Lounge and Restaurant'
-    GenreJob.perform
+    DerivedGenresJob.perform
     gp = venue.genre_points.first
     gp.should be_present
     gp.genre.name.should eq 'Jazz'

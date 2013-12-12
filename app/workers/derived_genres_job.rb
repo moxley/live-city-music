@@ -1,5 +1,5 @@
 # Calculate genre by associations and name
-class GenreJob
+class DerivedGenresJob
   def self.perform
     new.perform
   end
@@ -19,11 +19,11 @@ class GenreJob
 
   def perform_on(ar_class)
     ar_class.pluck(:id).each do |id|
-      InstanceGenreJob.perform_async(ar_class.to_s, id)
+      InstanceDerivedGenresJob.perform_async(ar_class.to_s, id)
     end
   end
 
-  class InstanceGenreJob
+  class InstanceDerivedGenresJob
     include Sidekiq::Worker
 
     def perform(ar_class_s, id)
