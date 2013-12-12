@@ -14,6 +14,6 @@ every :day, at: '00:30' do
 end
 
 # 9pm PDT
-every :day, at: '5:00' do
+every :day, at: '05:05' do
   rake 'updates:artists_sources'
 end
