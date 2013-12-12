@@ -44,11 +44,16 @@ class Artist < ActiveRecord::Base
   end
 
   def add_genres!(source, names)
+    genres = []
     names.each do |name|
       genre = dependencies.find_or_create_genre(name)
-      gp = dependencies.find_or_initialize_genre_point(target: self, genre: genre, point_type: 'self_tag', source: source)
-      gp.update_attributes!(value: 2.0)
+      if genre.valid?
+        gp = dependencies.find_or_initialize_genre_point(target: self, genre: genre, point_type: 'self_tag', source: source)
+        gp.update_attributes!(value: 2.0)
+        genres << genre
+      end
     end
+    genres
   end
 
   def dependencies
@@ -76,7 +81,7 @@ class Artist < ActiveRecord::Base
     end
 
     def find_or_create_genre(name)
-      genre_util.fuzzy_find(name) || Genre.create!(name: name)
+      genre_util.fuzzy_find(name) || Genre.create(name: name)
     end
 
     private

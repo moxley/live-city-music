@@ -33,8 +33,16 @@ describe Artist do
         genre_point
       end
       dependencies.stub(:find_or_create_genre) { |name| genres_by_name[name] }
-      artist.add_genres! 'reverb', genre_names
+      returned_genres = artist.add_genres! double('source'), genre_names
       Set.new(genres.map { |g| g.name }).should eq Set.new(genre_names)
+      returned_genres.should eq genres
+    end
+
+    it 'skips invalid genre names' do
+      artist = stub_model(Artist) # without stubbed dependencies
+      source = stub_model(DataSource)
+      genres = artist.add_genres! source, ['genre0123456789012345678901234567890123456789']
+      genres.should be_blank
     end
   end
 
