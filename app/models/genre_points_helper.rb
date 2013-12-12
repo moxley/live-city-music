@@ -1,4 +1,3 @@
-# TODO Rename this to: GenreInNameHelper
 class GenrePointsHelper
   attr_accessor :target
 

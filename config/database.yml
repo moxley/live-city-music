@@ -8,6 +8,7 @@ development:
   <<: *common
   username: bands
   database: bands_development
+  pool: 25
 
   # Minimum log levels, in increasing order:
   #   debug5, debug4, debug3, debug2, debug1,

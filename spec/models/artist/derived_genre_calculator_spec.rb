@@ -7,6 +7,7 @@ describe Artist::DerivedGenreCalculator do
   let(:artist) { create_artist 'a1' }
   let(:venue) { Venue.new name: "Al's Den" }
   let(:event) { Event.create! title: 'e1', venue: venue }
+  let(:source) { DataSource.create! name: 's1', url: 'http://foo.bar/' }
   def peer_artist(name = 'a2')
     @peer_artist ||= begin
       create_artist(name).tap do |a2|
@@ -32,7 +33,7 @@ describe Artist::DerivedGenreCalculator do
                                 source:     tagger }
     end
 
-    it "is one point of 0.5 for a peer's genre tag" do
+    it "is one point of 0.5 for a peer_user_tag" do
       tagger.tag peer_artist, with: 'funk', on: :user_genres
       point_values = artist.calculate_genre
       point_values.length.should eq 1
@@ -43,7 +44,18 @@ describe Artist::DerivedGenreCalculator do
                                 source:     peer_artist }
     end
 
-    it "is one point of 1.0 for a user tag and one point of 0.5 for a peer's user tag" do
+    it "is 1.0 point for a peer's self_tag" do
+      peer_artist.add_genres! source, ['Funk']
+      point_values = artist.calculate_genre
+      point_values.length.should eq 1
+      point_item_should_match point_values[0],
+                              { value:      1.0,
+                                point_type: 'peer_self_tag',
+                                genre_name: 'Funk',
+                                source:     peer_artist }
+    end
+
+    it "is one point of 1.0 for a user_tag and one point of 0.5 for a peer's user_tag" do
       tagger.tag artist, with: 'funk', on: :user_genres
       tagger.tag peer_artist, with: 'funk', on: :user_genres
       point_values = artist.calculate_genre
@@ -77,7 +89,7 @@ describe Artist::DerivedGenreCalculator do
                                 source:     artist}
     end
 
-    it "is one point of 0.25 for a peer artist name embedded genre" do
+    it "is one point of 0.25 for a peer's name-based genre" do
       peer_artist('Richard Colvin & the NY Jazz Quartet')
       point_values = artist.calculate_genre
       point_values.length.should eq 1

@@ -55,6 +55,10 @@ class Artist < ActiveRecord::Base
     @dependencies ||= Dependencies.new
   end
 
+  def self_tagged_genre_points
+    genre_points.where(point_type: 'self_tag').includes(:genre)
+  end
+
   private
 
   class Dependencies

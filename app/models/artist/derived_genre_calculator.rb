@@ -37,8 +37,15 @@ class Artist::DerivedGenreCalculator
   end
 
   def calculate_points_from_peer(peer)
+    calculate_peer_self_tagged_points(peer) +
     calculate_peer_user_tagged_points(peer) +
     calculate_peer_name_embedded_points(peer)
+  end
+
+  def calculate_peer_self_tagged_points(peer)
+    peer.self_tagged_genre_points.map { |gp|
+      {point_type: 'peer_self_tag', genre_name: gp.genre_name, value: 1.0, source: peer}
+    }
   end
 
   # Peer's user-tagged genre
