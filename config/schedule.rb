@@ -12,3 +12,8 @@ end
 every :day, at: '00:30' do
   rake 'calculate_genres'
 end
+
+# 9pm PDT
+every :day, at: '5:00' do
+  rake 'updates:artists_sources'
+end

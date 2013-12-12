@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ArtistReverbBatchJob do
+describe UpdateArtistsFromSourcesJob do
   def create_job_run(artist, job_date)
     JobRun.create! job_type:   'artist_source_update',
                    sub_type:   'reverb',
@@ -34,7 +34,7 @@ describe ArtistReverbBatchJob do
     artists_by_id[artist_never_updated.id] = artist_never_updated
   end
 
-  subject(:job) { ArtistReverbBatchJob.new }
+  subject(:job) { UpdateArtistsFromSourcesJob.new }
 
   describe '#perform', integration: true do
     it 'performs a UpdateArtistReverbJob on every applicable artist' do
