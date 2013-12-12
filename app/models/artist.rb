@@ -25,7 +25,7 @@ class Artist < ActiveRecord::Base
   end
 
   def genre_calculator
-    @genre_calculator ||= GenreCalculator.new(self)
+    @genre_calculator ||= DerivedGenreCalculator.new(self)
   end
 
   def genre_points_helper

@@ -1,6 +1,6 @@
 # Infers musical genre for a given artist, based on the artist's name,
 # peers played with, and venues played at.
-class Artist::GenreCalculator
+class Artist::DerivedGenreCalculator
   attr_accessor :artist, :points_by_genre, :points_by_genre_name_and_point_type
 
   delegate :name,
@@ -19,6 +19,7 @@ class Artist::GenreCalculator
     @genre_points = Hash.new(0.0)
   end
 
+  # Derived genre, rather than tagged
   def calculate_genre
     calculate_user_tagged_points +
     calculate_name_embedded_points +
@@ -55,6 +56,6 @@ class Artist::GenreCalculator
   end
 
   def genre_calculator_helper
-    @genre_calculator_helper ||= GenreCalculatorHelper.new(self)
+    @genre_calculator_helper ||= DerivedGenreCalculatorHelper.new(self)
   end
 end

@@ -1,4 +1,4 @@
-class Venue::GenreCalculator
+class Venue::DerivedGenreCalculator
   attr_accessor :venue
 
   delegate :name,
@@ -24,6 +24,6 @@ class Venue::GenreCalculator
   end
 
   def genre_calculator_helper
-    @genre_calculator_helper ||= GenreCalculatorHelper.new(self)
+    @genre_calculator_helper ||= DerivedGenreCalculatorHelper.new(self)
   end
 end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Artist::GenreCalculator do
+describe Artist::DerivedGenreCalculator do
   include ModelHelper
 
   def create_artist(name); Artist.create!(name: name); end

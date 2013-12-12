@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Venue::GenreCalculator do
+describe Venue::DerivedGenreCalculator do
   include ModelHelper
 
   describe '#calculate_genre' do

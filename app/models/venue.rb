@@ -13,7 +13,7 @@ class Venue < ActiveRecord::Base
   delegate :calculate_and_apply_genres, to: :genre_points_helper
 
   def genre_calculator
-    @genre_calculator ||= GenreCalculator.new(self)
+    @genre_calculator ||= DerivedGenreCalculator.new(self)
   end
 
   def genre_points_helper
