@@ -3,17 +3,17 @@
 
 set :output, "/var/www/bandlist/shared/log/cron_log.log"
 
-# 4:00pm PDT
-every :day, at: '00:00' do
+# 12:00 PDT
+every :day, at: '20:00' do
   rake 'collect_pages'
 end
 
-# 4:30pm PDT
-every :day, at: '00:30' do
-  rake 'calculate_genres'
+# 12:30 PDT
+every :day, at: '20:30' do
+  rake 'updates:artists_sources'
 end
 
-# 9pm PDT
-every :day, at: '05:05' do
-  rake 'updates:artists_sources'
+# 12:45 PDT
+every :day, at: '20:45' do
+  rake 'calculate_genres'
 end
