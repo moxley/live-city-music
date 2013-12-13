@@ -22,19 +22,8 @@ describe Artist::DerivedGenreCalculator do
   end
 
   describe 'genre calculation' do
-    it 'is one point of 1.0 for a user genre tag' do
-      tagger.tag artist, with: 'funk', on: :user_genres
-      point_values = artist.calculate_genre
-      point_values.length.should eq 1
-      point_item_should_match point_values[0],
-                              { value:      1.0,
-                                point_type: 'user_tag',
-                                genre_name: 'funk',
-                                source:     tagger }
-    end
-
     it "is one point of 0.5 for a peer_user_tag" do
-      tagger.tag peer_artist, with: 'funk', on: :user_genres
+      peer_artist.add_user_tagged_genres! tagger, 'funk'
       point_values = artist.calculate_genre
       point_values.length.should eq 1
       point_item_should_match point_values[0],
@@ -55,24 +44,17 @@ describe Artist::DerivedGenreCalculator do
                                 source:     peer_artist }
     end
 
-    it "is one point of 1.0 for a user_tag and one point of 0.5 for a peer's user_tag" do
-      tagger.tag artist, with: 'funk', on: :user_genres
-      tagger.tag peer_artist, with: 'funk', on: :user_genres
-      point_values = artist.calculate_genre
-      point_values.length.should eq 2
+    it "0.5 point for a peer's user_tag" do
+      peer_artist.add_user_tagged_genres! tagger, 'Funk'
 
-      user_tag_pv = point_values.detect { |pv| pv[:point_type] == 'user_tag' }
-      user_tag_pv.should be_present
-      point_item_should_match user_tag_pv,
-                              { value: 1.0,
-                                genre_name: 'funk',
-                                source: tagger}
+      point_values = artist.calculate_genre
+      point_values.length.should eq 1
 
       peer_user_tag_pv = point_values.detect { |pv| pv[:point_type] == 'peer_user_tag' }
       peer_user_tag_pv.should be_present
       point_item_should_match peer_user_tag_pv,
                               { value:      0.5,
-                                genre_name: 'funk',
+                                genre_name: 'Funk',
                                 source:     peer_artist}
     end
 

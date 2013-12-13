@@ -10,8 +10,8 @@ describe DerivedGenresJob do
   context 'user tags' do
     before(:each) do
       jazz
-      tagger.tag(venue, with: 'jazz', on: :genres)
-      tagger.tag(artist, with: 'jazz', on: :genres)
+      venue.add_user_tagged_genres! tagger, ['jazz']
+      artist.add_user_tagged_genres! tagger, ['jazz']
       DerivedGenresJob.perform
     end
 

@@ -3,11 +3,9 @@ class Venue::DerivedGenreCalculator
 
   delegate :name,
            :genre_taggings,
-           :genre_util,
            to: :venue
 
-  delegate :calculate_user_tagged_points,
-           :calculate_name_embedded_points_for,
+  delegate :calculate_name_embedded_points_for,
            to: :genre_calculator_helper
 
   def initialize(venue)
@@ -15,7 +13,6 @@ class Venue::DerivedGenreCalculator
   end
 
   def calculate_genre
-    calculate_user_tagged_points +
     calculate_name_embedded_points
   end
 
@@ -25,5 +22,9 @@ class Venue::DerivedGenreCalculator
 
   def genre_calculator_helper
     @genre_calculator_helper ||= DerivedGenreCalculatorHelper.new(self)
+  end
+
+  def genre_util
+    @genre_util ||= GenreUtil.new
   end
 end
