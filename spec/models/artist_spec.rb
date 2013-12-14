@@ -11,6 +11,7 @@ describe Artist do
     subject(:artist) do
       stub_model(Artist).tap do |artist|
         artist.stub(genre_points_helper: genre_points_helper(artist))
+        artist.genre_util.points_helper.dependencies = dependencies
       end
     end
     def genre_points_helper(artist)

@@ -18,7 +18,7 @@ class Artist::DerivedGenreCalculator
   end
 
   def genre_util
-    @genre_util ||= GenreUtil.new
+    @genre_util ||= artist.genre_util
   end
 
   # Derived genre, rather than tagged
@@ -58,7 +58,7 @@ class Artist::DerivedGenreCalculator
 
   # Peer's name-embedded genre
   def calculate_peer_name_embedded_points(peer)
-    peer.calculate_name_embedded_points.map { |p|
+    self.class.new(peer).calculate_name_embedded_points.map { |p|
       {point_type: 'peer_name', genre_name: p[:genre_name], value: 0.25, source: peer}
     }
   end

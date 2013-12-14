@@ -25,6 +25,6 @@ class Venue < ActiveRecord::Base
   end
 
   def genre_util
-    @genre_util ||= GenreUtil.new
+    @genre_util ||= GenreUtil.new(self)
   end
 end

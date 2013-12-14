@@ -25,6 +25,6 @@ class Venue::DerivedGenreCalculator
   end
 
   def genre_util
-    @genre_util ||= GenreUtil.new
+    @genre_util ||= GenreUtil.new(venue)
   end
 end

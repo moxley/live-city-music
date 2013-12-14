@@ -1,8 +1,9 @@
 class GenrePointsHelper
-  attr_accessor :target
+  attr_accessor :target, :dependencies
 
   delegate :genre_util, :genre_points, to: :target
-  delegate :fuzzy_find, to: :genre_util
+  delegate :fuzzy_find, :derived_genre_calculator, to: :genre_util
+  delegate :calculate_genre, to: :derived_genre_calculator
 
   def initialize(target)
     @target = target
@@ -20,7 +21,7 @@ class GenrePointsHelper
   end
 
   def calculate_and_apply_genres
-    target.calculate_genre.each do |attrs|
+    calculate_genre.each do |attrs|
       genre = fuzzy_find(attrs[:genre_name])
       raise "No genre defined for #{attrs[:genre_name].inspect}" unless genre
       gp = GenrePoint.where(target:     target,
@@ -61,23 +62,30 @@ class GenrePointsHelper
   end
 
   def dependencies
-    @dependencies ||= Dependencies.new
+    @dependencies ||= Dependencies.new(target)
   end
 
   private
 
   class Dependencies
+    def initialize(target)
+      @target = target
+    end
+
     def find_or_initialize_genre_point(attrs)
       %i[target genre point_type source].each do |a|
         raise ArgumentError, "Missing :#{a}" if attrs[a].blank?
       end
-      constraints = {target_id:   attrs[:target].id,
-                     target_type: attrs[:target].class.to_s,
+      constraints = {#target_id:   attrs[:target].id,
+                     #target_type: attrs[:target].class.to_s,
+                     target:      attrs[:target],
                      genre_id:    attrs[:genre].id,
                      point_type:  attrs[:point_type],
                      source_type: attrs[:source].class.to_s,
                      source_id:   attrs[:source].id}
-      GenrePoint.where(constraints).first_or_initialize
+      GenrePoint.where(constraints).first_or_initialize do |gp|
+        gp.target ||= attrs[:target]
+      end
     end
 
     def find_or_create_genre(name)
@@ -87,7 +95,7 @@ class GenrePointsHelper
     private
 
     def genre_util
-      @genre_util ||= GenreUtil.new
+      @genre_util ||= GenreUtil.new(@target)
     end
   end
 end

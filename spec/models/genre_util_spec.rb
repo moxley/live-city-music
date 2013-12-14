@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe GenreUtil do
-  subject(:genre_util) { GenreUtil.new }
+  subject(:genre_util) { GenreUtil.new(double('artist')) }
 
   describe '#genres_in_name' do
     before(:each) do

@@ -9,17 +9,13 @@ class Artist < ActiveRecord::Base
   has_many :genre_points, as: :target
   has_many :job_runs, foreign_key: :target_id
 
-  delegate :calculate_genre,
-           :calculate_name_embedded_points,
-           to: :genre_calculator
-
   delegate :calculate_and_apply_genres,
            :self_tagged_genre_points,
            :user_tagged_genre_points,
            :add_genres!,
            :add_user_tagged_genres!,
            :dependencies, # TODO remove
-           to: :genre_points_helper
+           to: :genre_util
 
   def venues
     ids = Venue.joins(events: :artists_events).
@@ -29,12 +25,8 @@ class Artist < ActiveRecord::Base
     Venue.where(id: ids)
   end
 
-  def genre_calculator
-    @genre_calculator ||= DerivedGenreCalculator.new(self)
-  end
-
-  def genre_points_helper
-    @genre_points_helper ||= GenrePointsHelper.new(self)
+  def genre_util
+    @genre_util ||= GenreUtil.new(self)
   end
 
   def played_with

@@ -16,6 +16,7 @@ describe Artist::DerivedGenreCalculator do
       end
     end
   end
+  subject(:calc) { Artist::DerivedGenreCalculator.new(artist) }
 
   def point_item_should_match(point_item, hash)
     point_item.slice(*hash.keys).should eq hash
@@ -24,7 +25,7 @@ describe Artist::DerivedGenreCalculator do
   describe 'genre calculation' do
     it "is one point of 0.5 for a peer_user_tag" do
       peer_artist.add_user_tagged_genres! tagger, 'funk'
-      point_values = artist.calculate_genre
+      point_values = calc.calculate_genre
       point_values.length.should eq 1
       point_item_should_match point_values[0],
                               { value:      0.5,
@@ -35,7 +36,7 @@ describe Artist::DerivedGenreCalculator do
 
     it "is 1.0 point for a peer's self_tag" do
       peer_artist.add_genres! source, ['Funk']
-      point_values = artist.calculate_genre
+      point_values = calc.calculate_genre
       point_values.length.should eq 1
       point_item_should_match point_values[0],
                               { value:      1.0,
@@ -47,7 +48,7 @@ describe Artist::DerivedGenreCalculator do
     it "0.5 point for a peer's user_tag" do
       peer_artist.add_user_tagged_genres! tagger, 'Funk'
 
-      point_values = artist.calculate_genre
+      point_values = calc.calculate_genre
       point_values.length.should eq 1
 
       peer_user_tag_pv = point_values.detect { |pv| pv[:point_type] == 'peer_user_tag' }
@@ -59,8 +60,8 @@ describe Artist::DerivedGenreCalculator do
     end
 
     it "is one point of 0.5 for a artist name embedded genre" do
-      artist = create_artist('Ron Steen Jazz Jam')
-      point_values = artist.calculate_genre
+      artist.name = 'Ron Steen Jazz Jam'
+      point_values = calc.calculate_genre
       point_values.length.should eq 1
 
       pv = point_values[0]
@@ -73,7 +74,7 @@ describe Artist::DerivedGenreCalculator do
 
     it "is one point of 0.25 for a peer's name-based genre" do
       peer_artist('Richard Colvin & the NY Jazz Quartet')
-      point_values = artist.calculate_genre
+      point_values = calc.calculate_genre
       point_values.length.should eq 1
 
       pv = point_values[0]
