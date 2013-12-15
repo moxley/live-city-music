@@ -14,7 +14,6 @@ class Artist < ActiveRecord::Base
            :user_tagged_genre_points,
            :add_genres!,
            :add_user_tagged_genres!,
-           :dependencies, # TODO remove
            to: :genre_util
 
   def venues
