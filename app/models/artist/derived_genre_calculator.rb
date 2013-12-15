@@ -7,28 +7,21 @@ class Artist::DerivedGenreCalculator
            :genre_taggings,
            :played_with,
            :venues,
+           :genre_util,
            to: :artist
 
-  delegate :calculate_name_embedded_points_for,
-           to: :genre_calculator_helper
+  delegate :calculate_name_embedded_points,
+           to: :genre_util
 
   def initialize(artist)
     @artist = artist
     @genre_points = Hash.new(0.0)
   end
 
-  def genre_util
-    @genre_util ||= artist.genre_util
-  end
-
   # Derived genre, rather than tagged
   def calculate_genre
     calculate_name_embedded_points +
     calculate_points_from_peers
-  end
-
-  def calculate_name_embedded_points
-    calculate_name_embedded_points_for(artist)
   end
 
   def calculate_points_from_peers
@@ -61,9 +54,5 @@ class Artist::DerivedGenreCalculator
     self.class.new(peer).calculate_name_embedded_points.map { |p|
       {point_type: 'peer_name', genre_name: p[:genre_name], value: 0.25, source: peer}
     }
-  end
-
-  def genre_calculator_helper
-    @genre_calculator_helper ||= DerivedGenreCalculatorHelper.new(self)
   end
 end

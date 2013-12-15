@@ -1,8 +1,8 @@
 class GenrePointsHelper
-  attr_accessor :target, :dependencies
+  attr_accessor :target
 
   delegate :genre_util, :genre_points, to: :target
-  delegate :fuzzy_find, :derived_genre_calculator, to: :genre_util
+  delegate :fuzzy_find, :derived_genre_calculator, :dependencies, to: :genre_util
   delegate :calculate_genre, to: :derived_genre_calculator
 
   def initialize(target)
@@ -59,43 +59,5 @@ class GenrePointsHelper
 
   def add_user_tagged_genres!(user, names)
     add_genres!(user, names, 'user_tag', 1.0)
-  end
-
-  def dependencies
-    @dependencies ||= Dependencies.new(target)
-  end
-
-  private
-
-  class Dependencies
-    def initialize(target)
-      @target = target
-    end
-
-    def find_or_initialize_genre_point(attrs)
-      %i[target genre point_type source].each do |a|
-        raise ArgumentError, "Missing :#{a}" if attrs[a].blank?
-      end
-      constraints = {#target_id:   attrs[:target].id,
-                     #target_type: attrs[:target].class.to_s,
-                     target:      attrs[:target],
-                     genre_id:    attrs[:genre].id,
-                     point_type:  attrs[:point_type],
-                     source_type: attrs[:source].class.to_s,
-                     source_id:   attrs[:source].id}
-      GenrePoint.where(constraints).first_or_initialize do |gp|
-        gp.target ||= attrs[:target]
-      end
-    end
-
-    def find_or_create_genre(name)
-      genre_util.fuzzy_find(name) || Genre.create(name: name)
-    end
-
-    private
-
-    def genre_util
-      @genre_util ||= GenreUtil.new(@target)
-    end
   end
 end

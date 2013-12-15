@@ -10,13 +10,7 @@ describe Artist do
   describe '#add_genres!' do
     subject(:artist) do
       stub_model(Artist).tap do |artist|
-        artist.stub(genre_points_helper: genre_points_helper(artist))
-        artist.genre_util.points_helper.dependencies = dependencies
-      end
-    end
-    def genre_points_helper(artist)
-      GenrePointsHelper.new(artist).tap do |helper|
-        helper.stub(dependencies: dependencies)
+        artist.genre_util.dependencies = dependencies
       end
     end
     let(:dependencies) { double(:dependencies) }
