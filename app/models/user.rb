@@ -4,7 +4,6 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
   validates_uniqueness_of :email, case_sensitive: false
-  acts_as_tagger
 
   def email=(str)
     super str ? str.downcase : nil

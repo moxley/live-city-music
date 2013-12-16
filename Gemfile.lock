@@ -33,8 +33,6 @@ GEM
       multi_json (~> 1.3)
       thread_safe (~> 0.1)
       tzinfo (~> 0.3.37)
-    acts-as-taggable-on (2.4.1)
-      rails (>= 3, < 5)
     addressable (2.3.5)
     anemone (0.7.2)
       nokogiri (>= 1.3.0)
@@ -255,7 +253,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  acts-as-taggable-on
   anemone
   capistrano
   capistrano-bundler

@@ -1,10 +1,4 @@
 class Artist < ActiveRecord::Base
-  include TaggingHelper
-
-  attr_accessor :dependencies
-
-  acts_as_taggable_on :genres
-
   has_many :events
   has_many :genre_points, as: :target
   has_many :job_runs, foreign_key: :target_id
