@@ -6,13 +6,13 @@ set :domain, 'bandlist.moxicon.net'
 set :deploy_to, '/var/www/bandlist'
 set :repository, 'git@bitbucket.org:moxley/bandlist.git'
 set :branch, ENV['branch'] || "master"
-set :shared_paths, ['bin', 'log', 'public/assets', 'tmp', 'vendor/bundle']
+set :shared_paths, ['log', 'public/assets', 'tmp']
 set :user, 'deploy'    # Username in the server to SSH to.
 
 task :setup => :environment do
-  ['bin', 'bundle', 'log', 'public', 'tmp', 'vendor'].each do |name|
-    queue! %[mkdir -p "#{deploy_to}/shared/#{name}"]
-    queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/#{name}"]
+  shared_paths.each do |name|
+    queue! %[mkdir -p "#{shared_path}/shared/#{name}"]
+    queue! %[chmod g+rx,u+rwx "#{shared_path}/shared/#{name}"]
   end
 end
 
