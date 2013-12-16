@@ -1,0 +1,10 @@
+#!/bin/sh
+
+dbname=bands_production
+
+pg_dump --host=127.0.0.1 \
+        --username=bands \
+        --no-privileges \
+        --no-owner \
+        -f /var/www/bandlist/shared/backup/$dbname-`date +%Y%m%d-%H%m`.sql \
+        $dbname
