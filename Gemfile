@@ -36,9 +36,12 @@ end
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
-gem 'capistrano', group: :development
-gem 'capistrano-bundler', group: :development
-gem 'capistrano-rails', group: :development
+group :development do
+  gem 'capistrano'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'mina'
+end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
