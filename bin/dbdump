@@ -1,10 +1,17 @@
 #!/bin/sh
 
+# Exit on error
+set -e
+
 dbname=bands_production
+file=/var/www/bandlist/shared/backup/$dbname-`date +%Y%m%d-%H%m`.sql
 
 pg_dump --host=127.0.0.1 \
         --username=bands \
         --no-privileges \
         --no-owner \
-        -f /var/www/bandlist/shared/backup/$dbname-`date +%Y%m%d-%H%m`.sql \
+        --clean \
+        -f $file \
         $dbname
+
+echo "Dumped database to $file"
