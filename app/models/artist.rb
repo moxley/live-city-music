@@ -1,5 +1,6 @@
 class Artist < ActiveRecord::Base
-  has_many :events
+  has_many :artists_events
+  has_many :events, through: :artists_events
   has_many :genre_points, as: :target
   has_many :job_runs, foreign_key: :target_id
 
@@ -9,6 +10,44 @@ class Artist < ActiveRecord::Base
            :add_genres!,
            :add_user_tagged_genres!,
            to: :genre_util
+
+  def self.today_by_genre_id(id)
+    rows = Genre.
+      ungrouped_by_today.
+      where(genres: {id: id}).
+      group('artists.id').
+      select('artists.id artist_id, min(events.id) event_id').
+      to_a
+
+    event_ids_by_artist_ids = rows.inject({}) { |h, r| h[r.artist_id] = r.event_id; h }
+
+    artists = Artist.
+      where(id: rows.map(&:artist_id)).
+      order(:name)
+
+    events = Event.where(id: rows.map(&:event_id)).includes(:venue)
+    events_by_id = events.inject({}) { |h, e| h[e.id] = e; h }
+
+    artists.map do |artist|
+      event_id = event_ids_by_artist_ids[artist.id]
+      event = events_by_id[event_id]
+      ArtistInEvent.new(artist, event)
+    end
+  end
+
+  class ArtistInEvent
+    attr_accessor :artist, :event
+    delegate :name, to: :artist
+
+    def initialize(artist, event)
+      @artist = artist
+      @event = event
+    end
+
+    def venue
+      event.venue.name
+    end
+  end
 
   def venues
     ids = Venue.joins(events: :artists_events).

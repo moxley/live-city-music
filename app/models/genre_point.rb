@@ -7,6 +7,7 @@ class GenrePoint < ActiveRecord::Base
                    peer_name)
 
   belongs_to :target, polymorphic: true
+  belongs_to :artist, -> { where(genre_points: {target_type: 'Artist'}) }, class_name: 'Artist', foreign_key: :target_id
   belongs_to :source, polymorphic: true
   belongs_to :genre
 

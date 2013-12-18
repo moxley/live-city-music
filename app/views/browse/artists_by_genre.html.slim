@@ -1,0 +1,5 @@
+h1 = "Today's Artists Playing: #{@genre.name}"
+
+ul
+  - @artists.each do |artist|
+    li = "#{artist.name} at #{artist.venue}"

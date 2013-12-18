@@ -1,0 +1,7 @@
+h1 Today's Genres
+
+ul
+  - @genres.each do |genre|
+    li
+      a href="/today/#{genre.id}/artists"
+        = genre.name
