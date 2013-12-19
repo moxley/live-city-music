@@ -56,7 +56,7 @@ class PageCollector
   end
 
   def data_sources
-    DataSource.all
+    DataSource.where(name: %w(mercury stranger))
   end
 
   def downloads
