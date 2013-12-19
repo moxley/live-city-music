@@ -15,5 +15,5 @@ end
 
 # 12:45 PDT
 every :day, at: '20:45' do
-  rake 'calculate_genres'
+  rake 'calculate:genres'
 end
