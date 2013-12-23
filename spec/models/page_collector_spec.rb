@@ -15,14 +15,10 @@ describe PageCollector do
     PageImport::MercuryImporter.stub(delay: job)
   end
 
-  it 'fetches web pages and delivers them via email' do
+  it 'fetches web pages' do
     collector.stub(data_sources: [data_source])
     collector.should_receive(:http_fetch).at_least(:once) { response }
     date = Time.now.utc.strftime('%Y-%m-%dT%H')
-    collector.should_receive(:send_mail) do |mail|
-      mail.to.should eq ['moxley.stratton@gmail.com']
-      mail.attachments.map(&:filename).should include "mercury-#{date}.html"
-    end
 
     PageStorage.stub(store: true)
     stub_importer

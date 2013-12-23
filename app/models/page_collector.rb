@@ -12,7 +12,6 @@ class PageCollector
 
   def collect
     store_downloads
-    email_downloads
   end
 
   def store_downloads
@@ -37,22 +36,6 @@ class PageCollector
     data_source = DataSource.where(name: name).first_or_initialize
     data_source.url ||= url
     data_source
-  end
-
-  def email_downloads
-    out = StringIO.new
-    out.puts "PageCollector\n"
-    out.puts "Host: #{ENV['HOST']}"
-    out.puts "Downloads:"
-
-    downloads.each do |page_download|
-      out.puts "  #{page_download.storage_uri}: #{page_download.content.length}"
-    end
-    body = out.string
-
-    mail = create_mail(body)
-
-    send_mail(mail)
   end
 
   def data_sources
@@ -81,9 +64,5 @@ class PageCollector
 
   def http_fetch(uri_string)
     Net::HTTP.get_response(URI.parse(uri_string))
-  end
-
-  def send_mail(mail)
-    mail.deliver!
   end
 end
