@@ -40,21 +40,27 @@ class PageImport::MercuryImporter
   end
 
   def import(file, opts = {})
-    date = opts[:date] || date_from_file_path(file)
+    file_date = opts[:date] || date_from_file_path(file)
 
     PageParse::MercuryParser.new.raw_events_from_file(file).each do |raw_event|
-      starts_at, ends_at = EventParser.times(raw_event.time_info, date: date)
-      time_info = raw_event.time_info
-      time_info = "#{date.strftime('%Y-%m-%d')} #{time_info}" if date
-      event = Event.create title: raw_event.title,
-                           venue: find_or_create_venue(raw_event),
-                           description: raw_event.description,
-                           artists: find_or_create_artists(raw_event),
-                           time_info: time_info,
-                           starts_at: starts_at,
-                           ends_at: ends_at,
-                           price_info: raw_event.price_info
+      event = find_or_create_event(raw_event, file_date)
     end
+  end
+
+  def find_or_create_event(raw_event, file_date)
+    starts_at, ends_at = EventParser.times(raw_event.time_info, date: file_date)
+    time_info = raw_event.time_info
+    time_info = "#{file_date.strftime('%Y-%m-%d')} #{time_info}" if file_date
+    venue = find_or_create_venue(raw_event)
+    artists = find_or_create_artists(raw_event)
+    event = Event.where(venue_id: venue.id, starts_at: starts_at).first_or_initialize
+    event.update_attributes! title:       raw_event.title,
+                             description: raw_event.description,
+                             artists:     artists,
+                             time_info:   time_info,
+                             ends_at:     ends_at,
+                             price_info:  raw_event.price_info
+    event
   end
 
   def date_from_file_path(file)

@@ -25,6 +25,15 @@ describe PageImport::MercuryImporter do
 
       page_download.reload.imported_at.should be_present
     end
+
+    it 'does not duplicate events when run a second time' do
+      PageDownload.any_instance.stub(content: page_content_with_single_event)
+
+      expect {
+        PageImport::MercuryImporter.import_page_download(page_download.id)
+        PageImport::MercuryImporter.import_page_download(page_download.id)
+      }.to change(Event, :count).by(1)
+    end
   end
 
   describe '#import' do
