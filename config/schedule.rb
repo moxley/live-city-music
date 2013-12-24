@@ -4,8 +4,8 @@
 set :output, "/var/www/bandlist/shared/log/cron_log.log"
 
 # 00:05 & 12:05 Pacific
-every :day, at: '05 08,20 * * *' do
-  rake 'collect_pages'
+every :day, at: '05 08,19 * * *' do
+  rake 'pages:download'
 end
 
 # 00:30 & 12:30 Pacific
