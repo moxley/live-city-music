@@ -1,6 +1,7 @@
 require 'mina/bundler'
 require 'mina/rails'
 require 'mina/git'
+require 'mina/whenever'
 
 set :domain, 'bandlist.moxicon.net'
 set :deploy_to, '/var/www/bandlist'
@@ -28,6 +29,7 @@ task :deploy => :environment do
     invoke :'rails:assets_precompile'
 
     to :launch do
+      invoke :'whenever:write'
       queue "sudo /etc/init.d/sidekiq stop || true"
       queue "sudo /etc/init.d/sidekiq start"
       queue "sudo /etc/init.d/unicorn restart"
