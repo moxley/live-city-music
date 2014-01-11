@@ -10,9 +10,7 @@ describe PageCollector do
   end
 
   def stub_importer
-    job = double(:job)
-    job.stub(:import_page_download)
-    PageImport::MercuryImporter.stub(delay: job)
+    PageImport::MercuryImporter::ImportWorker.stub(perform_async: true)
   end
 
   it 'fetches web pages' do
@@ -54,11 +52,7 @@ describe PageCollector do
   end
 
   it 'fires off jobs to import each downloaded page' do
-    job = double(:job)
-    job.should_receive(:import_page_download) do |id|
-      id.should be_kind_of(Fixnum)
-    end
-    PageImport::MercuryImporter.stub(delay: job)
+    PageImport::MercuryImporter::ImportWorker.should_receive(:perform_async).with(kind_of(Fixnum))
 
     PageStorage.stub(store: true)
 

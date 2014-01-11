@@ -1,6 +1,14 @@
 require 'page_parse/mercury_parser'
 
 class PageImport::MercuryImporter
+  class ImportWorker
+    include Sidekiq::Worker
+
+    def perform(page_download_id)
+      PageImport::MercuryImporter.import_page_download(page_download_id)
+    end
+  end
+
   attr_accessor :city
 
   def initialize(opts={})

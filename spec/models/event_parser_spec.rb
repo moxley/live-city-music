@@ -41,10 +41,12 @@ describe EventParser do
     end
 
     it 'parses the starting time' do
-      time, _ = times('Sat., Oct. 5, 3 p.m.')
-      time.month.should eq 10
-      time.day.should eq 5
-      time.year.should eq 2013
+      Timecop.freeze(Date.new(2013, 10, 1)) do
+        time, _ = times('Sat., Oct. 5, 3 p.m.')
+        time.month.should eq 10
+        time.day.should eq 5
+        time.year.should eq 2013
+      end
     end
   end
 end

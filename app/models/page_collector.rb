@@ -22,7 +22,7 @@ class PageCollector
       page_download.downloaded_at = Time.now.utc
       page_download.save!
 
-      PageImport::MercuryImporter.delay.import_page_download(page_download.id)
+      PageImport::MercuryImporter::ImportWorker.perform_async(page_download.id)
     end
   end
 
