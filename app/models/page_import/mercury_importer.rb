@@ -62,7 +62,7 @@ class PageImport::MercuryImporter
     venue = find_or_create_venue(raw_event)
     artists = find_or_create_artists(raw_event)
     event = Event.where(venue_id: venue.id, starts_at: starts_at).first_or_initialize
-    event.update_attributes! title:       raw_event.title,
+    event.update_attributes! title:       raw_event.title[0, 255],
                              description: raw_event.description,
                              artists:     artists,
                              time_info:   time_info,
