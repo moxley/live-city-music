@@ -3,12 +3,14 @@ require 'mina/rails'
 require 'mina/git'
 require 'mina/whenever'
 
-set :domain, 'bandlist.moxicon.net'
+# set :domain, 'bandlist.moxicon.net'
+set :domain, 'ec2-54-186-131-89.us-west-2.compute.amazonaws.com'
 set :deploy_to, '/var/www/bandlist'
 set :repository, 'git@bitbucket.org:moxley/bandlist.git'
 set :branch, ENV['branch'] || "master"
 set :shared_paths, ['log', 'public/assets', 'tmp']
 set :user, 'deploy'    # Username in the server to SSH to.
+set :forward_agent, true
 
 task :setup => :environment do
   shared_paths.each do |name|
