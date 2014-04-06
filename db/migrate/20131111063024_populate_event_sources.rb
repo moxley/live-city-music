@@ -12,10 +12,13 @@ class PopulateEventSources < ActiveRecord::Migration
     }
   ]
 
+  class EventSource < ActiveRecord::Base
+  end
+
   def up
     return if Rails.env == 'test'
     URLS.each do |u|
-      event_source = DataSource.where(name: u[:name]).first_or_initialize
+      event_source = EventSource.where(name: u[:name]).first_or_initialize
       event_source.url = u[:url]
       event_source.save!
     end
