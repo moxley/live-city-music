@@ -38,14 +38,18 @@
   * chmod 600 .ssh/authorized_keys
   * exit
   * cat /home/ubuntu/.ssh/authorized_keys >> /home/deploy/.ssh/authorized_keys
+  * create file: /etc/sudoers.d/deploy:
+
+    ```
+    deploy ALL=NOPASSWD:/etc/init.d/postgres, /etc/init.d/redis_6379, /etc/init.d/nginx, /etc/init.d/unicorn, /etc/init.d/sidekiq
+    ```
+
 * Deployment local setup
   * Add your ssh public key to ~deploy:/.ssh/authorized_keys on the target system
   * Add doc/ssh_config to your ~/.ssh/config
 * Set up deployment directory
   * (as "root")
-  * mkdir -p /var/www/bandlist/current
-  * mkdir -p /var/www/bandlist/shared/log
-  * mkdir -p /var/www/bandlist/shared/tmp
+  * mkdir -p /var/www/bandlist
   * chown -R deploy:deploy /var/www
 * Install PostgreSQL: https://www.digitalocean.com/community/articles/how-to-install-and-use-postgresql-on-ubuntu-12-04
   * apt-get install postgresql postgresql-contrib
@@ -96,12 +100,28 @@
     ```
   * Chmod it with 600
   * In ~deploy/.profile, add: source ~/.env
-* Unicorn service init
+* Unicorn
   * Install doc/unicorn_init.sh to /etc/init.d/unicorn
   * update-rc.d unicorn defaults
   * update-rc.d unicorn enable
+  * mkdir /etc/unicorn
+  * Create file /etc/unicorn/bandlist.conf:
+
+    ```
+    RAILS_ENV=production
+    RAILS_ROOT=/var/www/bandlist/current
+    ```
+
 * Install nginx: https://www.digitalocean.com/community/articles/how-to-install-nginx-on-ubuntu-12-04-lts-precise-pangolin
   * apt-get install nginx
+  * cd /etc/nginx
+  * rm sites-enabled/default
+  * cat > sites-available/bandlist.conf
+
+   ```
+   include /var/www/bandlist/current/config/nginx.conf;
+   ```
+  * ln -s /etc/nginx/sites-available/bandlist.conf sites-enabled/bandlist.conf
 * Sidekiq deployment
   * Install doc/sidekiq_init.sh to /etc/init.d/sidekiq
   * sudo update-rc.d sidekiq defaults
