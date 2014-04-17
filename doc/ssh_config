@@ -3,3 +3,8 @@ Host aws1
   User deploy
   IdentityFile ~/.ssh/aws_rsa
   ForwardAgent yes
+
+Host droplet1
+  HostName 107.170.196.31
+  User deploy
+  ForwardAgent yes

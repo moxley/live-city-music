@@ -4,7 +4,8 @@ require 'mina/git'
 require 'mina/whenever'
 
 # set :domain, 'bandlist.moxicon.net'
-set :domain, 'ec2-54-186-131-89.us-west-2.compute.amazonaws.com'
+# set :domain, 'ec2-54-186-131-89.us-west-2.compute.amazonaws.com'
+set :domain, '107.170.196.31'
 set :deploy_to, '/var/www/bandlist'
 set :repository, 'git@bitbucket.org:moxley/bandlist.git'
 set :branch, ENV['branch'] || "master"

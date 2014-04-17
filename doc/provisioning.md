@@ -12,8 +12,19 @@
 * Install openssl-dev:
   * apt-get -y install zlib1g-dev libreadline-dev libssl-dev libcurl4-openssl-dev
 * Install postgresql-server-dev-x.y
-  * psql --version
-  * apt-get install postgresql-server-dev-9.1
+  * cat > /etc/apt/sources.list.d/pgdg.list
+
+    ```
+    deb http://apt.postgresql.org/pub/repos/apt/ saucy-pgdg main
+    ```
+  * wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+  * apt-get update
+  * apt-get upgrade
+  * apt-get install postgresql-9.3 postgresql-server-dev-9.3 postgresql-client-9.3
+  * If postgresql is already installed:
+    * apt-get install postgresql-client-9.1 postgresql-client-common
+    * psql --version
+    * apt-get install postgresql-server-dev-9.1
 * Install Ruby + Rails:
   * sudo su -
   * cd /usr/local
@@ -36,8 +47,12 @@
   * chmod 700 .ssh
   * touch .ssh/authorized_keys
   * chmod 600 .ssh/authorized_keys
+  * cat >> /home/deploy/.ssh/authorized_keys
+
+    ```
+    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6UIvYjuWPGOIK+tVXz2OoGnzKWYIW2kH257YxPsOV2FVm0gJ/C4AoPa++8/qAUFpvqjuyfeNpr5YHcZXGSssWeDgB0ZT7TWpZexFhQvo2la2/g//SAXfOGv2r5L8UP3GsBYWtbW5P0B6lD6ARDd7iITLzwkgAkM3+BxT0pPGwMZ1XotIPTWp43n741DHyoQhT0pQdfVGiM5DzAxCIO74LkMEE1hNMnz0sZaCSCdg3vc2D09CsnaO3Wiwmle7XS8dkcolxGV24fd8RTaxdP0Yx8b4PHbRjydJWyKr1Xo0GQvr6VoNaDTAueWD1tuB42TrOobDArpPjy+DFf2d5wRq5 moxley@clymb-macbook-pro.local
+    ```
   * exit
-  * cat /home/ubuntu/.ssh/authorized_keys >> /home/deploy/.ssh/authorized_keys
   * create file: /etc/sudoers.d/deploy:
 
     ```
@@ -45,14 +60,12 @@
     ```
 
 * Deployment local setup
-  * Add your ssh public key to ~deploy:/.ssh/authorized_keys on the target system
   * Add doc/ssh_config to your ~/.ssh/config
 * Set up deployment directory
   * (as "root")
-  * mkdir -p /var/www/bandlist
+  * mkdir -p /var/www/bandlist/shared/tmp
   * chown -R deploy:deploy /var/www
 * Install PostgreSQL: https://www.digitalocean.com/community/articles/how-to-install-and-use-postgresql-on-ubuntu-12-04
-  * apt-get install postgresql postgresql-contrib
   * su - postgres
   * psql
   * create user bands with password '?????';
@@ -68,10 +81,8 @@
   * tar xzvf redis-stable.tar.gz
   * cd redis-stable
   * make
-  * cp src/redis-server ../bin/
-  * cp src/redis-cli ../bin/
-  * mkdir /etc/redis
-  * mkdir /var/redis
+  * cp src/redis-{server,cli} ../bin/
+  * mkdir /etc/redis /var/redis
   * cp utils/redis_init_script /etc/init.d/redis_6379
   * cp redis.conf /etc/redis/6379.conf
   * vi /etc/redis/6379.conf
@@ -81,14 +92,16 @@
     * Set your preferred loglevel.
     * Set the logfile to /var/log/redis_6379.log
     * Set the dir to /var/redis/6379 (very important step!)
+    * /etc/init.d/redis_6379 start
 * Install Git: https://www.digitalocean.com/community/articles/how-to-install-git-on-ubuntu-12-04
   * apt-get install git-core
 * Install Node.js: http://stackoverflow.com/questions/16302436/install-nodejs-on-ubuntu-12-10
   * add-apt-repository ppa:chris-lea/node.js
   * apt-get update
-  * apt-get install python-software-properties python g++ make
+  * apt-get install python-software-properties python g++
 * Configure secrets
-  * Put secrets and other environment variables in ~/.env:
+  * su - deploy
+  * Put secrets and other environment variables in ~deploy/.env:
 
     ```
     export RAILS_ENV=production
@@ -98,14 +111,14 @@
     export SENDGRID_USERNAME=***
     export DB_PASSWORD=***
     ```
-  * Chmod it with 600
-  * In ~deploy/.profile, add: source ~/.env
+  * chmod 600 ~/.env
+  * echo "source ~/.env" >> ~/.profile
 * Unicorn
   * Install doc/unicorn_init.sh to /etc/init.d/unicorn
   * update-rc.d unicorn defaults
   * update-rc.d unicorn enable
   * mkdir /etc/unicorn
-  * Create file /etc/unicorn/bandlist.conf:
+  * cat > /etc/unicorn/bandlist.conf
 
     ```
     RAILS_ENV=production
@@ -122,17 +135,17 @@
    include /var/www/bandlist/current/config/nginx.conf;
    ```
   * ln -s /etc/nginx/sites-available/bandlist.conf sites-enabled/bandlist.conf
+  * /etc/init.d/nginx start
 * Sidekiq deployment
   * Install doc/sidekiq_init.sh to /etc/init.d/sidekiq
   * sudo update-rc.d sidekiq defaults
   * sudo update-rc.d sidekiq enable
 * Access to bitbucket:
-  * As "deploy", with SSH forwarding turned on:
+  * Connect to server via SSH as user "deploy", with SSH forwarding turned on (should already be configured)
   * ssh git@bitbucket.org
   * At prompt: enter "yes" to allow bitbucket.org to be added to known_hosts
   * git clone "git@bitbucket.org:moxley/bandlist.git" "/var/www/bandlist/scm" --bare
 * Locally, in development environment:
-  * bundle install --path .bundle --binstubs
   * bin/mina setup
   * ssh-agent && ssh-add
   * bin/mina deploy
