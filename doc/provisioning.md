@@ -63,7 +63,7 @@
   * Add doc/ssh_config to your ~/.ssh/config
 * Set up deployment directory
   * (as "root")
-  * mkdir -p /var/www/bandlist/shared/tmp
+  * mkdir -p /var/www/bandlist/shared/{tmp,log,public/assets}
   * chown -R deploy:deploy /var/www
 * Install PostgreSQL: https://www.digitalocean.com/community/articles/how-to-install-and-use-postgresql-on-ubuntu-12-04
   * su - postgres
