@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131216053342) do
+ActiveRecord::Schema.define(version: 20131226062705) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,15 @@ ActiveRecord::Schema.define(version: 20131216053342) do
   add_index "artists_events", ["artist_id"], name: "index_artists_events_on_artist_id", using: :btree
   add_index "artists_events", ["event_id"], name: "index_artists_events_on_event_id", using: :btree
 
+  create_table "cities", force: true do |t|
+    t.string "name"
+    t.string "slug"
+    t.string "state"
+    t.string "country"
+  end
+
+  add_index "cities", ["slug", "state", "country"], name: "index_cities_on_slug_and_state_and_country", unique: true, using: :btree
+
   create_table "data_sources", force: true do |t|
     t.string   "name",       limit: 30, null: false
     t.string   "url",                   null: false
@@ -53,6 +62,14 @@ ActiveRecord::Schema.define(version: 20131216053342) do
   end
 
   add_index "events", ["venue_id"], name: "index_events_on_venue_id", using: :btree
+
+  create_table "fetched_pages", force: true do |t|
+    t.string   "url",        null: false
+    t.text     "content",    null: false
+    t.datetime "fetched_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "genre_points", force: true do |t|
     t.string   "target_type", limit: 30,               null: false
