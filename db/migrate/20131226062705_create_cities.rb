@@ -12,11 +12,13 @@ class CreateCities < ActiveRecord::Migration
 
     add_index :cities, [:slug, :state, :country], unique: true
 
-    City.create name: 'Portland', slug: 'portland', state: 'OR', country: 'US'
-    City.create name: 'Seattle', slug: 'seattle', state: 'WA', country: 'US'
-    City.create name: 'Sacramento', slug: 'sacramento', state: 'CA', country: 'US'
-    City.create name: 'San Francisco', slug: 'san-francisco', state: 'CA', country: 'US'
-    City.create name: 'Los Angeles', slug: 'los-angeles', state: 'CA', country: 'US'
+    unless Rails.env.test?
+      City.create name: 'Portland', slug: 'portland', state: 'OR', country: 'US'
+      City.create name: 'Seattle', slug: 'seattle', state: 'WA', country: 'US'
+      City.create name: 'Sacramento', slug: 'sacramento', state: 'CA', country: 'US'
+      City.create name: 'San Francisco', slug: 'san-francisco', state: 'CA', country: 'US'
+      City.create name: 'Los Angeles', slug: 'los-angeles', state: 'CA', country: 'US'
+    end
   end
 
   def down
