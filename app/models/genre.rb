@@ -14,10 +14,10 @@ class Genre < ActiveRecord::Base
     end
   end
 
-  def self.for_today
+  def self.for_today(city_slug)
     # Start of day: 12am
     # Time Zone: Pacific
-    for_date(beginning_of_day)
+    for_date(city_slug, beginning_of_day)
   end
 
   def self.beginning_of_day
@@ -25,17 +25,17 @@ class Genre < ActiveRecord::Base
     Time.now.in_time_zone(tz).beginning_of_day
   end
 
-  def self.for_date(date)
-    ids = ungrouped_by_date(date).select('genres.id').group('genres.id').pluck(:id)
+  def self.for_date(city_slug, date)
+    ids = ungrouped_by_date(city_slug, date).select('genres.id').group('genres.id').pluck(:id)
     where(id: ids).order('name')
   end
 
-  def self.ungrouped_by_today
-    ungrouped_by_date(beginning_of_day)
+  def self.ungrouped_by_today(city_slug)
+    ungrouped_by_date(city_slug, beginning_of_day)
   end
 
-  def self.ungrouped_by_date(date)
-    query = joins({genre_points: {artist: {artists_events: {event: :venue}}}}).
-      where('events.starts_at > ?', date)
+  def self.ungrouped_by_date(city_slug, date)
+    query = joins({genre_points: {artist: {artists_events: {event: {venue: :city}}}}}).
+      where('cities.slug = ? AND events.starts_at > ?', city_slug, date)
   end
 end

@@ -3,5 +3,5 @@ h1 WTF is Playing Today?
 ul
   - @genres.each do |genre|
     li
-      a href="/today/#{genre.id}/artists"
+      a href="#{todays_artists_by_genre_path(city_slug: @city_slug, genre_id: genre.id)}"
         = genre.name

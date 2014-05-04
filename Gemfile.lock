@@ -74,6 +74,11 @@ GEM
     erubis (2.7.0)
     excon (0.28.0)
     execjs (2.0.2)
+    factory_girl (4.4.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (4.4.1)
+      factory_girl (~> 4.4.0)
+      railties (>= 3.0.0)
     fog (1.18.0)
       builder
       excon (~> 0.28.0)
@@ -260,6 +265,7 @@ DEPENDENCIES
   capistrano-rails
   coffee-rails (~> 4.0.0)
   devise
+  factory_girl_rails
   fog
   heroku
   jbuilder (~> 1.2)

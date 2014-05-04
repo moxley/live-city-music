@@ -17,6 +17,7 @@ VCR.configure do |c|
 end
 
 RSpec.configure do |config|
+  config.include FactoryGirl::Syntax::Methods
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
@@ -43,6 +44,10 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+
+  config.before :each do
+    FactoryGirl.reload
+  end
 end
 
 require 'sidekiq/testing'

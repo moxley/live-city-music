@@ -11,9 +11,9 @@ class Artist < ActiveRecord::Base
            :add_user_tagged_genres!,
            to: :genre_util
 
-  def self.today_by_genre_id(id)
+  def self.today_by_genre_id(city_slug, id)
     rows = Genre.
-      ungrouped_by_today.
+      ungrouped_by_today(city_slug).
       where(genres: {id: id}).
       group('artists.id').
       select('artists.id artist_id, min(events.id) event_id').
