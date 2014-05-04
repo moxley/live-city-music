@@ -58,6 +58,12 @@
     ```
     deploy ALL=NOPASSWD:/etc/init.d/postgres, /etc/init.d/redis_6379, /etc/init.d/nginx, /etc/init.d/unicorn, /etc/init.d/sidekiq
     ```
+  * vi ~deploy/.profile
+  * Add the following:
+
+    ```
+    PATH=$PATH:/usr/local/bin
+    ```
 
 * Deployment local setup
   * Add doc/ssh_config to your ~/.ssh/config
