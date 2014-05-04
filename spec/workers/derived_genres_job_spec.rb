@@ -3,7 +3,8 @@ require 'spec_helper'
 describe DerivedGenresJob do
   include ModelHelper
 
-  let(:venue) { Venue.create! name: 'v1' }
+  let(:venue) { Venue.create! name: 'v1', city: city }
+  let(:city)  { City.create! name: 'Portland', state: 'OR', country: 'US' }
   let(:artist) { Artist.create! name: 'a1' }
   let(:jazz) { Genre.create! name: 'Jazz' }
 
@@ -29,7 +30,7 @@ describe DerivedGenresJob do
 
   it "create a genre_point of 0.5 for a venue with \"Jazz\" in it's name" do
     jazz
-    venue = Venue.create! name: 'Ivories Jazz Lounge and Restaurant'
+    venue = Venue.create! name: 'Ivories Jazz Lounge and Restaurant', city: city
     DerivedGenresJob.perform
     gp = venue.genre_points.first
     gp.should be_present

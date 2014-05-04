@@ -22,3 +22,5 @@ TODO.md
 .env
 dump.rdb
 vendor/bundle/*
+custom_plan.rb
+zeus.json

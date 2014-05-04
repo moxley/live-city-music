@@ -11,6 +11,10 @@ class Venue < ActiveRecord::Base
            :add_user_tagged_genres!,
            to: :genre_util
 
+  validates :name,
+            :city,
+            presence: true
+
   def genre_util
     @genre_util ||= GenreUtil.new(self)
   end

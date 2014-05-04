@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe Venue do
-  subject(:venue) { Venue.create! name: 'Roxy' }
-  subject(:tagger) { User.create! email: 'a@b.com' }
+  subject(:venue) { Venue.create! name: 'Roxy', city: city }
+  let(:tagger)    { User.create! email: 'a@b.com' }
+  let(:city)      { City.create! name: 'Portland', state: 'OR', country: 'US' }
 
   it 'saves to database' do
     venue
