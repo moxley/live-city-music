@@ -12,21 +12,21 @@ class PageImport::MercuryImporter
   attr_accessor :city
 
   def initialize(opts={})
-    @city = opts[:city] || 'Portland'
+    @city = opts[:city] || City.find_by_name('Portland')
   end
 
   def self.for_mercury(opts = {})
-    new opts.merge(city: 'Portland')
+    new opts.merge(city: City.find_by_name('Portland'))
   end
 
   def self.for_stranger(opts = {})
-    new opts.merge(city: 'Seattle')
+    new opts.merge(city: City.find_by_name('Seattle'))
   end
 
   def self.import_page_download(page_download_id)
     page_download = PageDownload.find(page_download_id)
     source_name = page_download.data_source.name
-    city = case source_name
+    city_name = case source_name
     when 'stranger'
       'Seattle'
     when 'mercury'
@@ -35,9 +35,18 @@ class PageImport::MercuryImporter
       raise "Unrecognized event source name for #{self.class}: #{source_name}"
     end
 
+    city = City.find_by_name(city_name)
+    raise "City not found for city: #{city_name}" unless city
+
     new(city: city).tap do |importer|
       importer.import_page_download(page_download)
     end
+  end
+
+  def valid?
+    city or return false
+    city.respond_to?(:id) or return false
+    true
   end
 
   def import_page_download(page_download)
@@ -48,6 +57,7 @@ class PageImport::MercuryImporter
   end
 
   def import(file, opts = {})
+    raise "Invalid #{self.class}" unless valid?
     file_date = opts[:date] || date_from_file_path(file)
 
     PageParse::MercuryParser.new.raw_events_from_file(file).each do |raw_event|
@@ -84,7 +94,7 @@ class PageImport::MercuryImporter
 
   def find_or_create_venue(raw_event)
     loc = raw_event.location
-    event = Venue.where(name: loc.title, city: city).first_or_initialize
+    event = Venue.where(name: loc.title, city_id: city.id).first_or_initialize
     event.attributes = {address_1: loc.address_1, phone: loc.phone}
     event.save!
     event

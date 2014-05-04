@@ -1,6 +1,7 @@
 class Venue < ActiveRecord::Base
   has_many :events
   has_many :genre_points, as: :target
+  belongs_to :city
 
   delegate :calculate_genre,
            :calculate_name_embedded_points,
