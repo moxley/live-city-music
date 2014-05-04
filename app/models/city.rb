@@ -5,12 +5,24 @@ class City < ActiveRecord::Base
             :country,
             presence: true
 
-  def self.find_by_name(name)
-    where(slug: name.parameterize).first
-  end
-
   def name=(str)
     super
-    self.slug = str.parameterize
+    generate_slug
+  end
+
+  def state=(str)
+    super
+    generate_slug
+  end
+
+  def country=(str)
+    super
+    generate_slug
+  end
+
+  private
+
+  def generate_slug
+    self.slug = [name, state, country].join(' ').parameterize
   end
 end

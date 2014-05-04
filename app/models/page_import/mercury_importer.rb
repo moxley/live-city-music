@@ -12,31 +12,31 @@ class PageImport::MercuryImporter
   attr_accessor :city
 
   def initialize(opts={})
-    @city = opts[:city] || City.find_by_name('Portland')
+    @city = opts[:city] || City.find_by_slug('portland-or-us')
   end
 
   def self.for_mercury(opts = {})
-    new opts.merge(city: City.find_by_name('Portland'))
+    new opts.merge(city: City.find_by_slug('portland-or-us'))
   end
 
   def self.for_stranger(opts = {})
-    new opts.merge(city: City.find_by_name('Seattle'))
+    new opts.merge(city: City.find_by_slug('seattle-wa-us'))
   end
 
   def self.import_page_download(page_download_id)
     page_download = PageDownload.find(page_download_id)
     source_name = page_download.data_source.name
-    city_name = case source_name
+    city_slug = case source_name
     when 'stranger'
-      'Seattle'
+      'seattle-wa-us'
     when 'mercury'
-      'Portland'
+      'portland-or-us'
     else
       raise "Unrecognized event source name for #{self.class}: #{source_name}"
     end
 
-    city = City.find_by_name(city_name)
-    raise "City not found for city: #{city_name}" unless city
+    city = City.find_by_slug(city_slug)
+    raise "City not found for city: #{city_slug}" unless city
 
     new(city: city).tap do |importer|
       importer.import_page_download(page_download)
