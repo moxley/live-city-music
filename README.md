@@ -1,29 +1,20 @@
-# README
+# What
 
-Band information repository.
+LiveCityMusic is an application for discovering live music. Currently, it
+has a simple web UI to demonstrate a minimally viable product. Afterwards, it
+will have an API that can be consumed by native mobile devices and dynamic web
+clients.
 
-# Onboarding
+## Technology
 
-* Install Heroku Toolbelt: https://toolbelt.heroku.com/
-* Install heroku-config: `heroku plugins:install git://github.com/ddollar/heroku-config.git`
-* Create file `.env`
-* Add Amazon AWS credentials to `.env`
+LiveCityMusic uses the following open source technologies:
 
-# Development Process
+* Ruby on Rails
+* PostgreSQL
+* Redis
+* Sidekiq
 
-* To run rails server or rails console, use foreman: `foreman rails server`, `foreman rails console`.
-
-# Application Patterns
-
-* Everything in lib/ should be application agnostic, except for lib/tasks/*.rake
-
-## TODO
-
-* Tag relations
-* Populate remaining columns: events: starts_at, venues: state
-* Web-based interface
-
-## Redis
+## Redis setup
 
 To have launchd start redis at login:
     ln -sfv /usr/local/opt/redis/*.plist ~/Library/LaunchAgents
