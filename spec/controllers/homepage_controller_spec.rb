@@ -6,7 +6,7 @@ describe HomepageController do
   describe 'index' do
     it 'responds' do
       get :index
-      response.body.should include 'Bandlist'
+      response.body.should include 'Live City Music'
     end
   end
 end
