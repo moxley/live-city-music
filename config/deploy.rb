@@ -7,7 +7,7 @@ require 'mina/whenever'
 # set :domain, 'ec2-54-186-131-89.us-west-2.compute.amazonaws.com'
 set :domain, '107.170.196.31'
 set :deploy_to, '/var/www/bandlist'
-set :repository, 'git@bitbucket.org:moxley/bandlist.git'
+set :repository, 'git@github.com:moxley/live-city-music.git'
 set :branch, ENV['branch'] || "master"
 set :shared_paths, ['log', 'public/assets', 'tmp']
 set :user, 'deploy'    # Username in the server to SSH to.
