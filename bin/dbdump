@@ -4,6 +4,7 @@
 set -e
 
 dbname=bands_production
+mkdir -p /var/www/bandlist/shared/backup
 file=/var/www/bandlist/shared/backup/$dbname-`date +%Y%m%d-%H%m`.sql
 
 pg_dump --host=127.0.0.1 \
