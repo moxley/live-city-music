@@ -2,6 +2,7 @@ class Artist < ActiveRecord::Base
   has_many :artists_events
   has_many :events, through: :artists_events
   has_many :genre_points, as: :target
+  has_many :genres, through: :genre_points
   has_many :job_runs, foreign_key: :target_id
 
   delegate :calculate_and_apply_genres,

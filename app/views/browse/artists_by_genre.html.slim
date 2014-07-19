@@ -2,4 +2,7 @@ h1 = "Who is Playing: #{@genre.name}"
 
 ul
   - @artists.each do |artist|
-    li = "#{artist.name} at #{artist.venue}"
+    li
+      a> href=artist_path(artist.artist)
+        = artist.name
+      ' at #{artist.venue}

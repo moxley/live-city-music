@@ -1,0 +1,24 @@
+h1 Artist: #{@artist.name}
+
+h3 Genres:
+
+ul
+  - @genre_points.each do |gp|
+    li
+      = "#{gp.genre.name} (#{gp.value} – #{gp.point_type})"
+
+h3 Played With:
+
+ul
+  - @peers.each do |peer|
+    li
+      a href=artist_path(peer)
+        = peer.name
+
+h4 Shows Played:
+
+ul
+  - @events.each do |event|
+    li
+      .venue-and-date = "#{event.venue.name} on #{event.starts_at.strftime('%m/%d/%Y')}"
+      .title = event.title

@@ -12,6 +12,8 @@ Bands::Application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
+  get '/artist/:id', to: 'artists#show', as: 'artist'
+
   get 'today', to: redirect('/portland-or-us/today')
   get ':city_slug/today' => 'browse#genres'
   get ':city_slug/today/:genre_id/artists' => 'browse#artists_by_genre', as: 'todays_artists_by_genre'
