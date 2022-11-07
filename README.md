@@ -1,7 +1,7 @@
 # What
 
 LiveCityMusic is an application for discovering live music. Quite simply, it
-presents today's shows categorized my musical genre. This allows you to find an
+presents today's shows categorized by musical genre. This allows you to find an
 artist for tonight who plays one of your favorite kinds of music, without
 knowing the artist beforehand. Additionally, it has the ability to display the
 artist's play history and to display who else was on the bill for each show.
